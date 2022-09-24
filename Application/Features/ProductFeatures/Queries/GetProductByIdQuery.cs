@@ -21,7 +21,7 @@ namespace Application.Features.ProductFeatures.Queries
             }
             public async Task<Product> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
             {
-                var product = _context.Products.Where(a => a.Id == query.Id).FirstOrDefault();
+                var product = _context.Products.Where(a => a.Id == query.Id && a.IsDeleted == false).FirstOrDefault();
                 if (product == null) return null;
                 return product;
             }

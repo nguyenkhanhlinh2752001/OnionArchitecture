@@ -21,11 +21,20 @@ namespace Application.Features.ProductFeatures.Commands
             }
             public async Task<int> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
-                var product = await _context.Products.Where(a => a.Id == command.Id).FirstOrDefaultAsync();
-                if (product == null) return default;
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-                return product.Id;
+                var product = _context.Products.Where(a => a.Id == command.Id).FirstOrDefault();
+
+                if (product == null)
+                {
+                    return default;
+                }
+                else
+                {
+                    product.IsDeleted = true;
+                    product.DeleledDate = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    return product.Id;
+                }
             }
         }
     }

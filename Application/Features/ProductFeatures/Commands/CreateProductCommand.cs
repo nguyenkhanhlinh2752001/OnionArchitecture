@@ -10,6 +10,8 @@ namespace Application.Features.ProductFeatures.Commands
         public string Barcode { get; set; }
         public string Description { get; set; }
         public decimal Rate { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
 
         public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
         {
@@ -25,6 +27,11 @@ namespace Application.Features.ProductFeatures.Commands
                 product.Name = command.Name;
                 product.Rate = command.Rate;
                 product.Description = command.Description;
+                product.Price = command.Price;
+                product.Quantity = command.Quantity;
+                product.CreatedDate=DateTime.Now;
+                product.IsDeleted = false;
+
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 return product.Id;

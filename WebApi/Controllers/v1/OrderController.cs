@@ -1,6 +1,7 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
 using Application.Features.CategoryFeatures.Queries;
 using Application.Features.CustomerFeatures.Commands;
+using Application.Features.CustomerFeatures.Queries;
 using Application.Features.OrderDetailFeatures.Commands;
 using Application.Features.OrderFeatures.Commands;
 using Application.Features.OrderFeatures.Queries;
@@ -21,6 +22,12 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> GetAll()
         {
             return Ok(await Mediator.Send(new GetAllOrdersQuery()));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return Ok(await Mediator.Send(new GetOrderByIdQuery { Id = id }));
         }
 
 

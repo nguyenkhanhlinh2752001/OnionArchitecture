@@ -27,10 +27,14 @@ namespace Application.Features.OrderDetailFeatures.Commands
             public async Task<int> Handle(UpdateOrderDetailCommand command, CancellationToken cancellationToken)
             {
                 var obj = _context.OrderDetails.Where(p => p.OrderId == command.OrderId && p.ProductId == command.ProductId).FirstOrDefault();
+                var oldQuantity = obj.Quantity;
                 obj.Quantity = command.Quantity;
                 await _context.SaveChangesAsync();
 
                 UpdateTotalPrice(command.OrderId);
+                await _context.SaveChangesAsync();
+
+                UpdateProductQuantity(command.ProductId, oldQuantity, obj.Quantity);
                 await _context.SaveChangesAsync();
 
                 return obj.Id;
@@ -51,6 +55,12 @@ namespace Application.Features.OrderDetailFeatures.Commands
                 }
                 var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
                 order.TotalPrice = y;
+            }
+
+            public async void UpdateProductQuantity(int producId, int oldQuantity,  int newQuantity)
+            {
+                var product = _context.Products.Where(p => p.Id == producId).FirstOrDefault();
+                product.Quantity = product.Quantity + oldQuantity - newQuantity;
             }
         }
     }

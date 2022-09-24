@@ -41,6 +41,10 @@ namespace Application.Features.OrderDetailFeatures.Commands
 
                     UpdateTotalPrice(command.OrderId);
                     await _context.SaveChangesAsync();
+
+                    UpdateProductQuantity(command.ProductId, command.Quantity);
+                    await _context.SaveChangesAsync();
+
                     return obj.Id;
                 }
                 else return 0;
@@ -60,6 +64,12 @@ namespace Application.Features.OrderDetailFeatures.Commands
                 }
                 var order = _context.Orders.Where(o => o.Id == orderId).FirstOrDefault();
                 order.TotalPrice = y;
+            }
+
+            public async void UpdateProductQuantity(int producId, int quantity)
+            {
+                var product = _context.Products.Where(p => p.Id == producId).FirstOrDefault();
+                product.Quantity = product.Quantity - quantity;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Application.Features.CustomerFeatures.Commands;
+using Application.Features.CustomerFeatures.Queries;
 using Application.Features.OrderDetailFeatures.Commands;
-using Application.Features.OrderFeatures.Commands;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,5 +29,9 @@ namespace WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new DeleteOrderDetailByIdCommand { OrderId = orderId, ProductId=productId }));
         }
+
+        
+
+        
     }
 }

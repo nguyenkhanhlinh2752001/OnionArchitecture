@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Application",
+    "\\Application\\Features",
+    "\\Application\\Features\\OrderDetailFeatures",
+    "\\Application\\Features\\OrderDetailFeatures\\Commands"
+  ],
+  "SelectedNode": "\\Application\\Features\\OrderDetailFeatures\\Commands\\DeleteOrderDetailByIdCommand.cs",
+  "PreviewInSolutionExplorer": false
+}

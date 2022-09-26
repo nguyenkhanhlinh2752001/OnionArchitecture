@@ -6,6 +6,7 @@ namespace Application.Features.ProductFeatures.Commands
 {
     public class CreateProductCommand: IRequest<int>
     {
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Barcode { get; set; }
         public string Description { get; set; }
@@ -23,6 +24,7 @@ namespace Application.Features.ProductFeatures.Commands
             public async Task<int> Handle(CreateProductCommand command, CancellationToken cancellationToken)
             {
                 var product = new Product();
+                product.CategoryId = command.CategoryId;
                 product.Barcode = command.Barcode;
                 product.Name = command.Name;
                 product.Rate = command.Rate;

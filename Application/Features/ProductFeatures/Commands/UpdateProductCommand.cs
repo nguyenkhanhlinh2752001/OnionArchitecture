@@ -6,6 +6,7 @@ namespace Application.Features.ProductFeatures.Commands
     public class UpdateProductCommand: IRequest<int>
     {
         public int Id { get; set; }
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Barcode { get; set; }
         public string Description { get; set; }
@@ -29,6 +30,7 @@ namespace Application.Features.ProductFeatures.Commands
                 }
                 else
                 {
+                    product.CategoryId = command.CategoryId;
                     product.Barcode = command.Barcode;
                     product.Name = command.Name;
                     product.Rate = command.Rate;

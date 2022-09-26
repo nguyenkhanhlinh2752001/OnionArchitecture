@@ -1,29 +1,31 @@
-﻿using Application.Features.CustomerFeatures.Queries;
+﻿using Application.DTOs;
 using Application.Interfaces;
-using Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.OrderFeatures.Queries
 {
-    public class GetOrderByIdQuery : IRequest<Order>
+    public class GetOrderByIdQuery : IRequest<OrderDTO>
     {
         public int Id { get; set; }
-        public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order>
+        public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderDTO>
         {
             private readonly IApplicationDbContext _context;
             public GetOrderByIdQueryHandler(IApplicationDbContext context)
             {
                 _context = context;
             }
-            public async Task<Order> Handle(GetOrderByIdQuery query, CancellationToken cancellationToken)
+            public async Task<OrderDTO> Handle(GetOrderByIdQuery query, CancellationToken cancellationToken)
             {
-                var obj = _context.Orders.Where(a => a.Id == query.Id && a.IsDeleted == false).FirstOrDefault();
-                if (obj == null) return null;
+                var obj =  (from o in _context.Orders
+                             join c in _context.Customers on o.CustomerId equals c.Id
+                             where o.Id == query.Id && c.IsDeleted==false 
+                             select new OrderDTO()
+                             {
+                                 Id = o.Id,
+                                 CustomerName = c.Name,
+                                 TotalPrice = o.TotalPrice,
+                                 CreatedDate=o.CreatedDate
+                             }).FirstOrDefault();
                 return obj;
             }
         }

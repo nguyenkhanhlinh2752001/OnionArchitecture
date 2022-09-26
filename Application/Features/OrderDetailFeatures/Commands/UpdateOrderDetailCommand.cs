@@ -1,13 +1,5 @@
-﻿using Application.Features.CustomerFeatures.Commands;
-using Application.Interfaces;
-using Domain.Entities;
+﻿using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.OrderDetailFeatures.Commands
 {

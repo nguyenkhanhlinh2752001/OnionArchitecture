@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs;
+using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,23 +11,33 @@ using System.Threading.Tasks;
 
 namespace Application.Features.ProductFeatures.Queries
 {
-    public class GetAllProductsQuery: IRequest<IEnumerable<Product>>
+    public class GetAllProductsQuery: IRequest<IEnumerable<ProductDTO>>
     {
-        public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<Product>>
+
+        public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDTO>>
         {
             private readonly IApplicationDbContext _context;
             public GetAllProductsQueryHandler(IApplicationDbContext context)
             {
                 _context = context;
             }
-            public async Task<IEnumerable<Product>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
+            public async Task<IEnumerable<ProductDTO>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
             {
-                var productList = await _context.Products.Where(p => p.IsDeleted == false).ToListAsync();
-                if (productList == null)
-                {
-                    return null;
-                }
-                return productList.AsReadOnly();
+                var list = await (from p in _context.Products
+                                  join c in _context.Categories on p.CategoryId equals c.Id
+                                  where p.IsDeleted==false
+                                  select new ProductDTO()
+                                  {
+                                      Id = p.Id,
+                                      ProductName = p.Name,
+                                      CategoryName = c.Name,
+                                      Barcode = p.Barcode,
+                                      Description = p.Description,
+                                      Price = p.Price,
+                                      Quantity = p.Quantity,
+                                      CreatedDate = p.CreatedDate,
+                                  }).ToListAsync();
+                return list.AsReadOnly();
             }
         }
     }

@@ -35,6 +35,9 @@
             "projectReferences": {
               "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj": {
                 "projectPath": "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj"
+              },
+              "D:\\Intern\\OnionArchitecture\\Persistence\\Persistence.csproj": {
+                "projectPath": "D:\\Intern\\OnionArchitecture\\Persistence\\Persistence.csproj"
               }
             }
           }
@@ -167,8 +170,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj": {
-                "projectPath": "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj"
+              "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj"
               }
             }
           }

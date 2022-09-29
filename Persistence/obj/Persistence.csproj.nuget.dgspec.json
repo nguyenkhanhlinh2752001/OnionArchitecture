@@ -4,80 +4,6 @@
     "D:\\Intern\\OnionArchitecture\\Persistence\\Persistence.csproj": {}
   },
   "projects": {
-    "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj",
-        "projectName": "Application",
-        "projectPath": "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\linh-vostro\\.nuget\\packages\\",
-        "outputPath": "D:\\Intern\\OnionArchitecture\\Application\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\linh-vostro\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net6.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
-            "projectReferences": {
-              "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
-          "dependencies": {
-            "MediatR.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[10.0.1, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[6.0.9, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -167,8 +93,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj": {
-                "projectPath": "D:\\Intern\\OnionArchitecture\\Application\\Application.csproj"
+              "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Intern\\OnionArchitecture\\Domain\\Domain.csproj"
               }
             }
           }

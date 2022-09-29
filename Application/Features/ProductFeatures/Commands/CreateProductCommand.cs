@@ -1,6 +1,6 @@
-﻿using Application.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
 using MediatR;
+using Persistence.Context;
 
 namespace Application.Features.ProductFeatures.Commands
 {
@@ -16,8 +16,8 @@ namespace Application.Features.ProductFeatures.Commands
 
         public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public CreateProductCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public CreateProductCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

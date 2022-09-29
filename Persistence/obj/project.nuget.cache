@@ -1,13 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "jZrT8W0d42hnQHWDgGCqm23qwhjRGsrzCcIH03hVnukeLHkU56zsyj3NiKVXZFJKQg4mL7BjavEzPfZsixB5yw==",
+  "dgSpecHash": "7HrOzX9H8i+AFyE/C5wO7PN2vzADfRrTeyGa/dygS3w2QIa8H1NHXL0+a82f3pgRs9wpjQACJQqO7yjRrrnihA==",
   "success": true,
   "projectFilePath": "D:\\Intern\\OnionArchitecture\\Persistence\\Persistence.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\linh-vostro\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
-    "C:\\Users\\linh-vostro\\.nuget\\packages\\mediatr\\10.0.1\\mediatr.10.0.1.nupkg.sha512",
-    "C:\\Users\\linh-vostro\\.nuget\\packages\\mediatr.contracts\\1.0.1\\mediatr.contracts.1.0.1.nupkg.sha512",
-    "C:\\Users\\linh-vostro\\.nuget\\packages\\mediatr.extensions.microsoft.dependencyinjection\\10.0.1\\mediatr.extensions.microsoft.dependencyinjection.10.0.1.nupkg.sha512",
     "C:\\Users\\linh-vostro\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\linh-vostro\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\linh-vostro\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",

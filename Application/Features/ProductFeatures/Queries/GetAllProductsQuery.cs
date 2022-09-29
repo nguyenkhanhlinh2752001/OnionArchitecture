@@ -1,8 +1,8 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace Application.Features.ProductFeatures.Queries
 
         public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDTO>>
         {
-            private readonly IApplicationDbContext _context;
-            public GetAllProductsQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public GetAllProductsQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

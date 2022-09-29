@@ -1,29 +1,44 @@
-﻿using Application.Features.ProductFeatures.Queries;
-using Application.Interfaces;
-using Domain.Entities;
+﻿using Application.DTOs;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 
 namespace Application.Features.CategoryFeatures.Queries
 {
-    public class GetCategoryByIdQuery : IRequest<Category>
+    public class GetCategoryByIdQuery : IRequest<CategoryDTO>
     {
         public int Id { get; set; }
-        public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, Category>
+
+        public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDTO>
         {
-            private readonly IApplicationDbContext _context;
-            public GetCategoryByIdQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+
+            public GetCategoryByIdQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
-            public async Task<Category> Handle(GetCategoryByIdQuery query, CancellationToken cancellationToken)
+
+            public async Task<CategoryDTO> Handle(GetCategoryByIdQuery query, CancellationToken cancellationToken)
             {
-                var obj = _context.Categories.Where(a => a.Id == query.Id && a.IsDeleted == false).FirstOrDefault();
-                if (obj == null) return null;
+                var obj = await (from c in _context.Categories
+                                 where c.Id == query.Id
+                                 select new CategoryDTO
+                                 {
+                                     CategoryName = c.Name,
+                                     Products = (from p in _context.Products
+                                                 join ct in _context.Categories
+                                                 on p.CategoryId equals ct.Id
+                                                 where c.Id == query.Id
+                                                 select new ProductDTO
+                                                 {
+                                                     ProductName = p.Name,
+                                                     Barcode = p.Barcode,
+                                                     Description = p.Description,
+                                                     Rate = p.Rate,
+                                                     Price = p.Price,
+                                                     Quantity = p.Quantity
+                                                 }).ToList()
+                                 }).FirstOrDefaultAsync();
                 return obj;
             }
         }

@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using MediatR;
+﻿using MediatR;
+using Persistence.Context;
 
 namespace Application.Features.CategoryFeatures.Commands
 {
@@ -8,8 +8,8 @@ namespace Application.Features.CategoryFeatures.Commands
         public int Id { get; set; }
         public class DeleteCategoryByIdCommandHandler : IRequestHandler<DeleteCategoryByIdCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public DeleteCategoryByIdCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public DeleteCategoryByIdCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

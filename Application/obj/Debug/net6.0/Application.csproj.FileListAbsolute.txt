@@ -13,3 +13,5 @@ D:\Intern\OnionArchitecture\Application\obj\Debug\net6.0\Application.dll
 D:\Intern\OnionArchitecture\Application\obj\Debug\net6.0\refint\Application.dll
 D:\Intern\OnionArchitecture\Application\obj\Debug\net6.0\Application.pdb
 D:\Intern\OnionArchitecture\Application\obj\Debug\net6.0\ref\Application.dll
+D:\Intern\OnionArchitecture\Application\bin\Debug\net6.0\Persistence.dll
+D:\Intern\OnionArchitecture\Application\bin\Debug\net6.0\Persistence.pdb

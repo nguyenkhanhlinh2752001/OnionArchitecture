@@ -1,7 +1,7 @@
 ﻿using Application.Features.ProductFeatures.Commands;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace Application.Features.CategoryFeatures.Commands
 
         public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public CreateCategoryCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public CreateCategoryCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

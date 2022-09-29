@@ -1,8 +1,8 @@
 ﻿using Application.Features.CategoryFeatures.Queries;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Application.Features.CustomerFeatures.Queries
     {
         public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, IEnumerable<Customer>>
         {
-            private readonly IApplicationDbContext _context;
-            public GetAllCustomersQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public GetAllCustomersQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

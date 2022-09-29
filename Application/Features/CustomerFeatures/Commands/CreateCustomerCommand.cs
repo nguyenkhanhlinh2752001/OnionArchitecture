@@ -1,7 +1,7 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +18,8 @@ namespace Application.Features.CustomerFeatures.Commands
 
         public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public CreateCustomerCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public CreateCustomerCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

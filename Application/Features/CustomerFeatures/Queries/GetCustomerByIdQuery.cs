@@ -1,7 +1,7 @@
 ﻿using Application.Features.CategoryFeatures.Queries;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Application.Features.CustomerFeatures.Queries
         public int Id { get; set; }
         public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, Customer>
         {
-            private readonly IApplicationDbContext _context;
-            public GetCustomerByIdQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public GetCustomerByIdQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

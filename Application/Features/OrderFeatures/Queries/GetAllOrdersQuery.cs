@@ -1,8 +1,8 @@
 ﻿using Application.Features.CustomerFeatures.Queries;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Application.Features.OrderFeatures.Queries
     {
         public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, IEnumerable<Order>>
         {
-            private readonly IApplicationDbContext _context;
-            public GetAllOrdersQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public GetAllOrdersQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

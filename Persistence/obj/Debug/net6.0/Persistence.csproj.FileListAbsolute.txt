@@ -1,9 +1,7 @@
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.deps.json
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.dll
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.pdb
-D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Application.dll
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Domain.dll
-D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Application.pdb
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Domain.pdb
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.csproj.AssemblyReference.cache
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig

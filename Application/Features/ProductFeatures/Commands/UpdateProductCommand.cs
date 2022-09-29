@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using MediatR;
+﻿using MediatR;
+using Persistence.Context;
 
 namespace Application.Features.ProductFeatures.Commands
 {
@@ -15,8 +15,8 @@ namespace Application.Features.ProductFeatures.Commands
         public int Quantity { get; set; }
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public UpdateProductCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public UpdateProductCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

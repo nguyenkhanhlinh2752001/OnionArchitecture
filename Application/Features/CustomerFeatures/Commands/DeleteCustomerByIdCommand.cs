@@ -1,6 +1,6 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
-using Application.Interfaces;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,8 @@ namespace Application.Features.CustomerFeatures.Commands
         public int Id { get; set; }
         public class DeleteCustomerByIdCommandHandler : IRequestHandler<DeleteCustomerByIdCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public DeleteCustomerByIdCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public DeleteCustomerByIdCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

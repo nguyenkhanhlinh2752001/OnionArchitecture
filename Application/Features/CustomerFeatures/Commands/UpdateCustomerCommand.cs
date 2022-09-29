@@ -1,6 +1,6 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
-using Application.Interfaces;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +18,8 @@ namespace Application.Features.CustomerFeatures.Commands
 
         public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public UpdateCustomerCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public UpdateCustomerCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

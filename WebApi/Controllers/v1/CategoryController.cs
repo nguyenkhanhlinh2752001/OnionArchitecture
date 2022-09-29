@@ -29,7 +29,6 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -42,10 +41,6 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetCategoryByIdQuery { Id = id }));
         }
 
-        [HttpGet("{id}/Products")]
-        public async Task<IActionResult> GetAllProductsByCategoryId(int id)
-        {
-            return Ok(await Mediator.Send(new GetAllProductsByCategoryIdQuery { Id = id }));
-        }
+        
     }
 }

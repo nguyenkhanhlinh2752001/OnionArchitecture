@@ -1,6 +1,6 @@
-﻿using Application.Interfaces;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,8 @@ namespace Application.Features.ProductFeatures.Commands
         public int Id { get; set; }
         public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
         {
-            private readonly IApplicationDbContext _context;
-            public DeleteProductByIdCommandHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public DeleteProductByIdCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

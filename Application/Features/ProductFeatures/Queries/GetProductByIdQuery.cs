@@ -1,7 +1,7 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Application.Features.ProductFeatures.Queries
         public int Id { get; set; }
         public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDTO>
         {
-            private readonly IApplicationDbContext _context;
-            public GetProductByIdQueryHandler(IApplicationDbContext context)
+            private readonly ApplicationDbContext _context;
+            public GetProductByIdQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }

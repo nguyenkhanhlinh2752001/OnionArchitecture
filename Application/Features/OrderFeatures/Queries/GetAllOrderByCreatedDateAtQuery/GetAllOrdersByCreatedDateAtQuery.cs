@@ -1,6 +1,4 @@
-﻿using Application.DTOs;
-using Domain.Entities;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
@@ -29,7 +27,7 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQ
                                   {
                                       CustomerName = c.Name,
                                       TotalPrice = o.TotalPrice,
-                                      CreatedDate = o.CreatedDate.Date
+                                      CreatedDate = o.CreatedDate
                                   }).ToListAsync();
                 return list.AsReadOnly();
             }

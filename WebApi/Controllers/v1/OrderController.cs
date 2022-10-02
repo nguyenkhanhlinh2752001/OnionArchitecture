@@ -1,6 +1,7 @@
 ﻿using Application.Features.OrderFeatures.Commands;
 using Application.Features.OrderFeatures.Queries;
 using Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQuery;
+using Application.Features.OrderFeatures.Queries.GetAllOrdersByCreatedDateFromToQuery;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -47,6 +48,12 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> GetByCreatedDate(DateTime date)
         {
             return Ok(await Mediator.Send(new GetAllOrdersByCreatedDateAtQuery { CreatedDate=date.Date}));
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByCreatedDateFromTo(DateTime datefrom, DateTime dateto)
+        {
+            return Ok(await Mediator.Send(new GetAllOrdersByCreatedDateFromToQuery { CreatedDateFrom = datefrom.Date, CreatedDateTo=dateto.Date }));
         }
 
         [HttpGet("{id}")]

@@ -36,9 +36,9 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetProductsByCategoryId(int id)
         {
-            return Ok(await Mediator.Send(new GetCategoryByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetProductsByCategoryIdQuery { Id = id }));
         }
 
         

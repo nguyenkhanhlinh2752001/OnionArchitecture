@@ -61,5 +61,7 @@ namespace WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetOrderByIdQuery { Id = id }));
         }
+
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Features.CustomerFeatures.Commands;
 using Application.Features.CustomerFeatures.Queries;
+using Application.Features.CustomerFeatures.Queries.GetCustomersByPhoneQuery;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -44,6 +45,12 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> GetAllOrdersByCustomerId(int id)
         {
             return Ok(await Mediator.Send(new GetAllOrdersByCustomerIdQuery { Id = id }));
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByPhone(string phone)
+        {
+            return Ok(await Mediator.Send(new GetCustomersByPhoneQuery { Phone = phone }));
         }
     }
 }

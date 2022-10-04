@@ -5,20 +5,20 @@ using Persistence.Context;
 
 namespace Application.Features.CategoryFeatures.Queries
 {
-    public class GetCategoryByIdQuery : IRequest<CategoryDTO>
+    public class GetProductsByCategoryIdQuery : IRequest<CategoryDTO>
     {
         public int Id { get; set; }
 
-        public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDTO>
+        public class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, CategoryDTO>
         {
             private readonly ApplicationDbContext _context;
 
-            public GetCategoryByIdQueryHandler(ApplicationDbContext context)
+            public GetProductsByCategoryIdQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<CategoryDTO> Handle(GetCategoryByIdQuery query, CancellationToken cancellationToken)
+            public async Task<CategoryDTO> Handle(GetProductsByCategoryIdQuery query, CancellationToken cancellationToken)
             {
                 var obj = await (from c in _context.Categories
                                  where c.Id == query.Id

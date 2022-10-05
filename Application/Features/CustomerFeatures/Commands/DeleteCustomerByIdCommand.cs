@@ -18,7 +18,7 @@ namespace Application.Features.CustomerFeatures.Commands
 
             public async Task<int> Handle(DeleteCustomerByIdCommand command, CancellationToken cancellationToken)
             {
-                var obj = _context.Customers.Where(a => a.Id == command.Id).FirstOrDefault();
+                var obj = _context.Users.Where(a => a.Id == command.Id).FirstOrDefault();
 
                 if (obj == null)
                 {

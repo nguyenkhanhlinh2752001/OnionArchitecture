@@ -12,7 +12,6 @@ namespace Domain.Common
         public int Id { get; set; }
 
         public DateTime CreatedDate { get; set; }
-
         public DateTime DeleledDate { get; set; }
 
         [DefaultValue(false)]

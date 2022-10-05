@@ -1,5 +1,6 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
 using Application.Features.CategoryFeatures.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -7,6 +8,7 @@ namespace WebApi.Controllers.v1
     public class CategoryController: BaseApiController
     {
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateCategoryCommand command)
         {
             return Ok(await Mediator.Send(command));

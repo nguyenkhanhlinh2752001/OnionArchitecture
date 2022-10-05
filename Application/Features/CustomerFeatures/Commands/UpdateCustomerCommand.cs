@@ -12,7 +12,7 @@ namespace Application.Features.CustomerFeatures.Commands
     public class UpdateCustomerCommand : IRequest<int>
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Username { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
 
@@ -25,7 +25,7 @@ namespace Application.Features.CustomerFeatures.Commands
             }
             public async Task<int> Handle(UpdateCustomerCommand command, CancellationToken cancellationToken)
             {
-                var product = _context.Customers.Where(a => a.Id == command.Id).FirstOrDefault();
+                var product = _context.Users.Where(a => a.Id == command.Id).FirstOrDefault();
 
                 if (product == null)
                 {
@@ -33,7 +33,7 @@ namespace Application.Features.CustomerFeatures.Commands
                 }
                 else
                 {
-                    product.Name = command.Name;
+                    product.Username = command.Username;
                     product.Phone = command.Phone;
                     product.Address = command.Address;
 

@@ -20,12 +20,12 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQ
             public async Task<IEnumerable<GetAllOrdersByCreatedDateAtViewModel>> Handle(GetAllOrdersByCreatedDateAtQuery query, CancellationToken token)
             {
                 var list = await (from o in _context.Orders
-                                  join c in _context.Customers
+                                  join c in _context.Users
                                   on o.CustomerId equals c.Id
                                   where o.CreatedDate.Date == query.CreatedDate.Date
                                   select new GetAllOrdersByCreatedDateAtViewModel
                                   {
-                                      CustomerName = c.Name,
+                                      CustomerName = c.Username,
                                       TotalPrice = o.TotalPrice,
                                       CreatedDate = o.CreatedDate
                                   }).ToListAsync();

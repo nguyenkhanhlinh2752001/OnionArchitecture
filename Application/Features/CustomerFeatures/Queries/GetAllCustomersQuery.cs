@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CustomerFeatures.Queries
 {
-    public class GetAllCustomersQuery : IRequest<IEnumerable<Customer>>
+    public class GetAllCustomersQuery : IRequest<IEnumerable<User>>
     {
-        public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, IEnumerable<Customer>>
+        public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, IEnumerable<User>>
         {
             private readonly ApplicationDbContext _context;
             public GetAllCustomersQueryHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
-            public async Task<IEnumerable<Customer>> Handle(GetAllCustomersQuery query, CancellationToken cancellationToken)
+            public async Task<IEnumerable<User>> Handle(GetAllCustomersQuery query, CancellationToken cancellationToken)
             {
-                var list = await _context.Customers.Where(p => p.IsDeleted == false).ToListAsync();
+                var list = await _context.Users.Where(p => p.IsDeleted == false).ToListAsync();
                 if (list == null)
                 {
                     return null;

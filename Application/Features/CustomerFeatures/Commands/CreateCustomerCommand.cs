@@ -12,7 +12,7 @@ namespace Application.Features.CustomerFeatures.Commands
 {
     public class CreateCustomerCommand: IRequest<int>
     {
-        public string Name { get; set; }
+        public string Username { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
 
@@ -25,14 +25,14 @@ namespace Application.Features.CustomerFeatures.Commands
             }
             public async Task<int> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
             {
-                var obj = new Customer();
-                obj.Name = command.Name;
+                var obj = new User();
+                obj.Username = command.Username;
                 obj.Phone = command.Phone;
                 obj.Address = command.Address;
                 obj.CreatedDate = DateTime.Now;
                 obj.IsDeleted = false;
 
-                _context.Customers.Add(obj);
+                _context.Users.Add(obj);
                 await _context.SaveChangesAsync();
                 return obj.Id;
             }

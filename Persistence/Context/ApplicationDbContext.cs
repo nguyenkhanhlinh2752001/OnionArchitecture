@@ -16,7 +16,7 @@ namespace Persistence.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Permisson> Permissons { get; set; }
-        public DbSet<RolePermisson> RolePermissons { get; set; }
+        public DbSet<Menu> Menus { get; set; }
         public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();

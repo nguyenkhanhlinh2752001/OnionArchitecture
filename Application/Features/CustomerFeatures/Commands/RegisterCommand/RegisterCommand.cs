@@ -26,63 +26,66 @@ namespace Application.Features.CustomerFeatures.Commands.RegisterCommand
         public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterCommandViewModel>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IConfiguration _config;
 
-            public RegisterCommandHandler(ApplicationDbContext context, IConfiguration config)
+            public RegisterCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
-                _config = config;
             }
 
             public async Task<RegisterCommandViewModel> Handle(RegisterCommand command, CancellationToken token)
             {
-                command.Username = command.Username.ToLower();
-                if (_context.Users.Any(u => u.Username == command.Username))
+                var dbContextTransaction = _context.Database.BeginTransaction();
+                try
                 {
+                    command.Username = command.Username.ToLower();
+                    if (_context.Users.Any(u => u.Username == command.Username))
+                    {
+                        return new RegisterCommandViewModel
+                        {
+                            IsSuccess = false,
+                            Message = "Register failed"
+                        };
+                    }
+                    var newUser = new User
+                    {
+                        Username = command.Username,
+                        Phone = command.Phone,
+                        Address = command.Address,
+                        Email = command.Email,
+                        PasswordHash = EnCodeHelper.EnCodeSha1(command.Password),
+                        CreatedDate = DateTime.UtcNow.Date,
+                        ResetToken = ""
+                    };
+                    _context.Users.Add(newUser);
+                    await _context.SaveChangesAsync();
+
+                    var userRole = new UserRole
+                    {
+                        RoleId = 3,
+                        UserId = newUser.Id,
+                    };
+                    _context.UserRoles.Add(userRole);
+                    await _context.SaveChangesAsync();
+
+                    await dbContextTransaction.CommitAsync();
+                    await dbContextTransaction.DisposeAsync();
+
+                    var validToken = TokenHelper.GenerateToken(newUser.Username,userRole.RoleId);
                     return new RegisterCommandViewModel
                     {
-                        IsSuccess = false,
-                        Message = "Register failed"
+                        IsSuccess = true,
+                        Message = validToken
                     };
                 }
-                var newUser = new User
+                catch(Exception)
                 {
-                    Username = command.Username,
-                    Phone = command.Phone,
-                    Address = command.Address,
-                    Email = command.Email,
-                    PasswordHash = EnCodeHelper.EnCodeSha1(command.Password),
-                    CreatedDate = DateTime.UtcNow.Date,
-                    ResetToken=""
-                };
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
-                var validToken = CreateToken(newUser.Username, newUser.Phone);
-                return new RegisterCommandViewModel
-                {
-                    IsSuccess = true,
-                    Message = validToken
-                };
+                    await dbContextTransaction.RollbackAsync();
+                    await dbContextTransaction.DisposeAsync();
+                    throw;
+                }
             }
 
-            public string CreateToken(string username, string phone)
-            {
-                var claims = new List<Claim>()
-                {
-                    new Claim(JwtRegisteredClaimNames.NameId, username),
-                    new Claim(JwtRegisteredClaimNames.PhoneNumber, phone),
-                };
-                var symetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddDays(1),
-                    SigningCredentials = new SigningCredentials(symetricKey, SecurityAlgorithms.HmacSha256Signature),
-                };
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
-            }
+            
         }
     }
 }

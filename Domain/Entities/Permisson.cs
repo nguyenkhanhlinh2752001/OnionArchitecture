@@ -4,9 +4,12 @@ namespace Domain.Entities
 {
     public class Permisson : BaseEntity
     {
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public int ParentId { get; set; }
-        public int Order { get; set; }
+        public int MenuId { get; set; }
+        public int RoleId { get; set; }
+        public bool CanAccess { get; set; }
+        public bool CanAdd { get; set; }
+        public bool CanUpdate { get; set; }
+        public bool CanDelete { get; set; }
+
     }
 }

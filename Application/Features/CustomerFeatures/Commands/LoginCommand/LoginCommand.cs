@@ -1,11 +1,8 @@
 ﻿using Application.Helper;
+using Application.Services;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Persistence.Context;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Application.Features.CustomerFeatures.Commands.LoginCommand
 {
@@ -17,12 +14,10 @@ namespace Application.Features.CustomerFeatures.Commands.LoginCommand
         public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandViewModel>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IConfiguration _config;
 
-            public LoginCommandHandler(ApplicationDbContext context, IConfiguration config)
+            public LoginCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
-                _config = config;
             }
 
             public async Task<LoginCommandViewModel> Handle(LoginCommand command, CancellationToken token)
@@ -46,30 +41,23 @@ namespace Application.Features.CustomerFeatures.Commands.LoginCommand
                             Message = "Invalid password"
                         };
                 }
-                var validToken = CreateToken(currentUser.Username);
+                var role = (from u in _context.Users
+                            join ur in _context.UserRoles
+                            on u.Id equals ur.UserId
+                            join r in _context.Roles
+                            on ur.RoleId equals r.Id
+                            where u.Username == currentUser.Username
+                            select new RoleVM
+                            {
+                                Id = r.Id,
+                            }).FirstOrDefault();
+
+                var validToken = TokenHelper.GenerateToken(currentUser.Username, role.Id);
                 return new LoginCommandViewModel
                 {
                     IsSuccess = true,
                     Message = validToken
                 };
-            }
-
-            public string CreateToken(string username)
-            {
-                var claims = new List<Claim>()
-                {
-                    new Claim(JwtRegisteredClaimNames.NameId, username)
-                };
-                var symetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddDays(1),
-                    SigningCredentials = new SigningCredentials(symetricKey, SecurityAlgorithms.HmacSha256Signature),
-                };
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
             }
         }
     }

@@ -1,19 +1,25 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
 using Application.Features.CategoryFeatures.Queries;
+using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
 {
-    public class CategoryController: BaseApiController
+    public class CategoryController : BaseApiController
     {
+        private readonly ICurrentUserService _currentUserService;
+
+        public CategoryController(ICurrentUserService currentUserService)
+        {
+            _currentUserService = currentUserService;
+        }
+
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create(CreateCategoryCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -32,8 +38,11 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
+            //var tmp = _currentUserService.Username;
+            //var tmp2 = _currentUserService.RoleId;
             return Ok(await Mediator.Send(new GetAllCategoriesQuery()));
         }
 
@@ -42,7 +51,5 @@ namespace WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetProductsByCategoryIdQuery { Id = id }));
         }
-
-        
     }
 }

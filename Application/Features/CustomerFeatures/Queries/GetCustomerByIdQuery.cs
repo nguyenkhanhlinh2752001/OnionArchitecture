@@ -6,7 +6,7 @@ namespace Application.Features.CustomerFeatures.Queries
 {
     public class GetCustomerByIdQuery : IRequest<User>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, User>
         {
@@ -19,7 +19,7 @@ namespace Application.Features.CustomerFeatures.Queries
 
             public async Task<User> Handle(GetCustomerByIdQuery query, CancellationToken cancellationToken)
             {
-                var obj = _context.Users.Where(a => a.Id == query.Id && a.IsDeleted == false).FirstOrDefault();
+                var obj = _context.Users.Where(a => a.Id == query.Id && a.IsActive == false).FirstOrDefault();
                 if (obj == null) return null;
                 return obj;
             }

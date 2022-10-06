@@ -8,13 +8,7 @@ namespace WebApi.Controllers.v1
 {
     public class CategoryController : BaseApiController
     {
-        private readonly ICurrentUserService _currentUserService;
-
-        public CategoryController(ICurrentUserService currentUserService)
-        {
-            _currentUserService = currentUserService;
-        }
-
+ 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryCommand command)
         {
@@ -38,11 +32,9 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAll()
         {
-            //var tmp = _currentUserService.Username;
-            //var tmp2 = _currentUserService.RoleId;
             return Ok(await Mediator.Send(new GetAllCategoriesQuery()));
         }
 

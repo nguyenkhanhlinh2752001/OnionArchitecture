@@ -1,21 +1,15 @@
-﻿using Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
-    public class User : BaseEntity
+    public class User : IdentityUser
     {
-        public string Username { get; set; }
-
-        [EmailAddress]
-        public string Email { get; set; }
-
-        public string Phone { get; set; }
-        public string Address { get; set; }
-        public string PasswordHash { get; set; }
-        public string ResetToken { get; set; }
-
-        public DateTime ResetTokenExpiryDate { get; set; }
+        public string? FullName { get; set; }
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        [DefaultValue(true)]
+        public bool? IsActive { get; set; }
     }
 }

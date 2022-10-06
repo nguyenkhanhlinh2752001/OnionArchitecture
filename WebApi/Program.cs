@@ -1,14 +1,20 @@
-using Application;
+﻿using Application;
 using Application.Services;
 using Application.Settings;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using Persistence.Context;
+using Persistence.DatabaseSeeder;
+using Persistence.Interfaces;
+using Persistence.Services;
 using System.Text;
-using WebApi.Services;
+using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,14 +80,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddIdentity<User, Role>(options =>
+    {
+        options.Password.RequiredLength = 3;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.User.RequireUniqueEmail = true;
+    }).AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+builder.Services.AddTransient<IUserService, UserService>();
+
 //builder.Services.AddSwagger
 
 //Mail
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddTransient<IMailService, MailService>();
-
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
+builder.Services.AddTransient<IMailService, MailService>();
 
 #region API Versioning
 
@@ -115,5 +134,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.InitializeDb();
 
 app.Run();

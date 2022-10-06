@@ -6,7 +6,7 @@ namespace Application.Features.OrderFeatures.Commands
 {
     public class CreateOrderCommand : IRequest<int>
     {
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
 

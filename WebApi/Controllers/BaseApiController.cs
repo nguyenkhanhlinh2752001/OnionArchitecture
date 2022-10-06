@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Services;
 
 namespace WebApi.Controllers
 {
@@ -10,5 +10,9 @@ namespace WebApi.Controllers
     {
         private IMediator _mediator;
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
+        private IUserService _userService;
+
+        protected IUserService UserService => _userService ??= HttpContext.RequestServices.GetService<IUserService>();
     }
 }

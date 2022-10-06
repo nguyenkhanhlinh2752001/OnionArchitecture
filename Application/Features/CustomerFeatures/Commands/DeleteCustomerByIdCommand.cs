@@ -3,11 +3,11 @@ using Persistence.Context;
 
 namespace Application.Features.CustomerFeatures.Commands
 {
-    public class DeleteCustomerByIdCommand : IRequest<int>
+    public class DeleteCustomerByIdCommand : IRequest<string>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
-        public class DeleteCustomerByIdCommandHandler : IRequestHandler<DeleteCustomerByIdCommand, int>
+        public class DeleteCustomerByIdCommandHandler : IRequestHandler<DeleteCustomerByIdCommand, string>
         {
             private readonly ApplicationDbContext _context;
 
@@ -16,7 +16,7 @@ namespace Application.Features.CustomerFeatures.Commands
                 _context = context;
             }
 
-            public async Task<int> Handle(DeleteCustomerByIdCommand command, CancellationToken cancellationToken)
+            public async Task<string> Handle(DeleteCustomerByIdCommand command, CancellationToken cancellationToken)
             {
                 var obj = _context.Users.Where(a => a.Id == command.Id).FirstOrDefault();
 
@@ -26,8 +26,7 @@ namespace Application.Features.CustomerFeatures.Commands
                 }
                 else
                 {
-                    obj.IsDeleted = true;
-                    obj.DeleledDate = DateTime.Now;
+                    obj.IsActive = true;
 
                     await _context.SaveChangesAsync();
                     return obj.Id;

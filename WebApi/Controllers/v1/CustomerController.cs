@@ -1,11 +1,8 @@
 ﻿using Application.Features.CustomerFeatures.Commands;
-using Application.Features.CustomerFeatures.Commands.ForgetPasswordCommand;
-using Application.Features.CustomerFeatures.Commands.LoginCommand;
-using Application.Features.CustomerFeatures.Commands.RegisterCommand;
-using Application.Features.CustomerFeatures.Commands.UpdatePasswordCommand;
 using Application.Features.CustomerFeatures.Queries;
 using Application.Features.CustomerFeatures.Queries.GetCustomersByPhoneQuery;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Models;
 
 namespace WebApi.Controllers.v1
 {
@@ -18,13 +15,13 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             return Ok(await Mediator.Send(new DeleteCustomerByIdCommand { Id = id }));
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateCustomerCommand command)
+        public async Task<IActionResult> Update(string id, UpdateCustomerCommand command)
         {
             if (id != command.Id)
             {
@@ -40,13 +37,13 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(string id)
         {
             return Ok(await Mediator.Send(new GetCustomerByIdQuery { Id = id }));
         }
 
         [HttpGet("{id}/Orders")]
-        public async Task<IActionResult> GetAllOrdersByCustomerId(int id)
+        public async Task<IActionResult> GetAllOrdersByCustomerId(string id)
         {
             return Ok(await Mediator.Send(new GetAllOrdersByCustomerIdQuery { Id = id }));
         }
@@ -58,33 +55,34 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterCommand command)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            return Ok(await Mediator.Send(command));
+            var result = await UserService.RegisterAsync(model);
+            return Ok(result);
         }
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+        //[HttpPost("Login")]
+        //public async Task<IActionResult> Login(LoginCommand command)
+        //{
+        //    return Ok(await Mediator.Send(command));
+        //}
 
-        [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(UpdatePasswordCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+        //[HttpPost("ChangePassword")]
+        //public async Task<IActionResult> ChangePassword(UpdatePasswordCommand command)
+        //{
+        //    return Ok(await Mediator.Send(command));
+        //}
 
-        [HttpPost("ForgetPassword")]
-        public async Task<IActionResult> ForgetPassword([FromForm] ForgetPasswordCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+        //[HttpPost("ForgetPassword")]
+        //public async Task<IActionResult> ForgetPassword([FromForm] ForgetPasswordCommand command)
+        //{
+        //    return Ok(await Mediator.Send(command));
+        //}
 
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+        //[HttpPost("ResetPassword")]
+        //public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+        //{
+        //    return Ok(await Mediator.Send(command));
+        //}
     }
 }

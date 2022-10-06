@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CustomerFeatures.Commands
 {
-    public class UpdateCustomerCommand : IRequest<int>
+    public class UpdateCustomerCommand : IRequest<string>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Username { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
 
-        public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, int>
+        public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, string>
         {
             private readonly ApplicationDbContext _context;
             public UpdateCustomerCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
-            public async Task<int> Handle(UpdateCustomerCommand command, CancellationToken cancellationToken)
+            public async Task<string> Handle(UpdateCustomerCommand command, CancellationToken cancellationToken)
             {
                 var product = _context.Users.Where(a => a.Id == command.Id).FirstOrDefault();
 
@@ -33,7 +33,7 @@ namespace Application.Features.CustomerFeatures.Commands
                 }
                 else
                 {
-                    product.Username = command.Username;
+                    product.UserName = command.Username;
                     product.Phone = command.Phone;
                     product.Address = command.Address;
 

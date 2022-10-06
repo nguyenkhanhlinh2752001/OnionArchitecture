@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using XSystem.Security.Cryptography;
+using System.Security.Cryptography;
 
 namespace Application.Helper
 {

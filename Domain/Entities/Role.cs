@@ -1,10 +1,9 @@
-﻿using Domain.Common;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
-    public class Role: BaseEntity
+    public class Role : IdentityRole
     {
-        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

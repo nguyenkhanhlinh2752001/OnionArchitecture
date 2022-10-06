@@ -7,7 +7,7 @@ namespace Application.Features.CustomerFeatures.Queries
 {
     public class GetAllOrdersByCustomerIdQuery : IRequest<IEnumerable<OrderDTO>>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public class GetAllOrdersByCustomerIdQueryHandler : IRequestHandler<GetAllOrdersByCustomerIdQuery, IEnumerable<OrderDTO>>
         {
@@ -26,7 +26,7 @@ namespace Application.Features.CustomerFeatures.Queries
                                   select new OrderDTO()
                                   {
                                       Id = o.Id,
-                                      CustomerName = c.Username,
+                                      CustomerName = c.UserName,
                                       TotalPrice = o.TotalPrice,
                                       CreatedDate = o.CreatedDate,
                                       OrderDetails = (from p in _context.Products

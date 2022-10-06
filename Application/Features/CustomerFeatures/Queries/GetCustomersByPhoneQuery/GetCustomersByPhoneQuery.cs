@@ -23,7 +23,7 @@ namespace Application.Features.CustomerFeatures.Queries.GetCustomersByPhoneQuery
                                   where c.Phone.Contains(query.Phone)
                                   select new GetCustomerByPhoneViewModel
                                   {
-                                      Name = c.Username,
+                                      Name = c.UserName,
                                       Phone = c.Phone,
                                       Address = c.Address,
                                   }).ToListAsync();

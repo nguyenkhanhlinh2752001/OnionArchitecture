@@ -25,7 +25,7 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQ
                                   where o.CreatedDate.Date == query.CreatedDate.Date
                                   select new GetAllOrdersByCreatedDateAtViewModel
                                   {
-                                      CustomerName = c.Username,
+                                      CustomerName = c.UserName,
                                       TotalPrice = o.TotalPrice,
                                       CreatedDate = o.CreatedDate
                                   }).ToListAsync();

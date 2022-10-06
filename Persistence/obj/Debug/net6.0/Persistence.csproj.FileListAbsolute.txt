@@ -1,4 +1,5 @@
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.deps.json
+D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.runtimeconfig.json
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.dll
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.pdb
 D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Domain.dll
@@ -12,6 +13,5 @@ D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.csproj.Copy
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.dll
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\refint\Persistence.dll
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.pdb
-D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\ref\Persistence.dll
-D:\Intern\OnionArchitecture\Persistence\bin\Debug\net6.0\Persistence.runtimeconfig.json
 D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\Persistence.genruntimeconfig.cache
+D:\Intern\OnionArchitecture\Persistence\obj\Debug\net6.0\ref\Persistence.dll

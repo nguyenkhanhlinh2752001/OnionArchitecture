@@ -1,6 +1,4 @@
 ﻿using Application;
-using Application.Services;
-using Application.Settings;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -13,8 +11,10 @@ using Persistence.Context;
 using Persistence.DatabaseSeeder;
 using Persistence.Interfaces;
 using Persistence.Services;
+using Persistence.Settings;
 using System.Text;
 using WebApi.Extensions;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,43 +64,50 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = false,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]))
-        };
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        RequireExpirationTime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+        ValidateIssuerSigningKey = true
+    };
+});
 
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddIdentity<User, Role>(options =>
-    {
-        options.Password.RequiredLength = 3;
-        options.Password.RequireDigit = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.User.RequireUniqueEmail = true;
-    }).AddEntityFrameworkStores<ApplicationDbContext>()
+{
+    options.Password.RequiredLength = 3;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.User.RequireUniqueEmail = true;
+}).AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
-builder.Services.AddTransient<IUserService, UserService>();
 
 //builder.Services.AddSwagger
-
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 //Mail
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddTransient<IMailService, MailService>();
+
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
+builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 
 #region API Versioning
 
@@ -134,6 +141,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.InitializeDb();
 

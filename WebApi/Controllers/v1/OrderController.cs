@@ -3,12 +3,22 @@ using Application.Features.OrderFeatures.Queries;
 using Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQuery;
 using Application.Features.OrderFeatures.Queries.GetAllOrdersByCreatedDateFromToQuery;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Constants;
+using Persistence.Services;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers.v1
 {
     public class OrderController : BaseApiController
     {
+        private readonly ICurrentUserService _currentUserService;
+        public OrderController(ICurrentUserService currentUserService)
+        {
+            _currentUserService = currentUserService;
+        }
+
         [HttpPost]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> Create(CreateOrderCommand command)
         {
             return Ok(await Mediator.Send(command));

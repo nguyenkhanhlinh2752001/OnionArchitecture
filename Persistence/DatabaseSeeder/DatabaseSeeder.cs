@@ -26,6 +26,8 @@ namespace Persistence.DatabaseSeeder
         {
             AddAdministrator();
             AddCategoryData();
+            AddMenu();
+            AddPermisson();
             _context.SaveChanges();
         }
 
@@ -65,8 +67,7 @@ namespace Persistence.DatabaseSeeder
                     UserName = "superadmin",
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
+                    CreatedOn = DateTime.Now,
                 };
                 var superUserInDb = await _userManager.FindByNameAsync(superUser.UserName);
                 if (superUserInDb == null)
@@ -95,6 +96,36 @@ namespace Persistence.DatabaseSeeder
                 _context.Categories.Add(new Category() { Name = "Lalala", CreatedDate = DateTime.Now });
                 _context.Categories.Add(new Category() { Name = "Lololo", CreatedDate = DateTime.Now });
                 _context.Categories.Add(new Category() { Name = "Lelele", CreatedDate = DateTime.Now });
+            }
+        }
+
+        private void AddMenu()
+        {
+            if (!_context.Menus.Any())
+            {
+                _context.Menus.Add(new Menu() { Name = "Product", Url = "/product" });
+                _context.Menus.Add(new Menu() { Name = "Category", Url = "/category" });
+                _context.Menus.Add(new Menu() { Name = "User", Url = "/user" });
+                _context.Menus.Add(new Menu() { Name = "Order", Url = "/order" });
+                _context.Menus.Add(new Menu() { Name = "Role", Url = "/role" });
+            }
+        }
+
+        private void AddPermisson()
+        {
+            if (!_context.Permissons.Any())
+            {
+                _context.Permissons.Add(new Permission() { RoleId = "9af8b544-a516-4744-ac15-b54807c843e5", MenuId = 1, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9af8b544-a516-4744-ac15-b54807c843e5", MenuId = 2, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9af8b544-a516-4744-ac15-b54807c843e5", MenuId = 3, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9af8b544-a516-4744-ac15-b54807c843e5", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9af8b544-a516-4744-ac15-b54807c843e5", MenuId = 5, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+
+                _context.Permissons.Add(new Permission() { RoleId = "9254596f-9ef9-4493-9918-35d6b72e7a01", MenuId = 1, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "9254596f-9ef9-4493-9918-35d6b72e7a01", MenuId = 2, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "9254596f-9ef9-4493-9918-35d6b72e7a01", MenuId = 3, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "9254596f-9ef9-4493-9918-35d6b72e7a01", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9254596f-9ef9-4493-9918-35d6b72e7a01", MenuId = 5, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
             }
         }
     }

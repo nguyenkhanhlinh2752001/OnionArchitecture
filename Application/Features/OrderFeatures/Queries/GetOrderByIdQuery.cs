@@ -22,7 +22,7 @@ namespace Application.Features.OrderFeatures.Queries
             {
                 var obj = await (from o in _context.Orders
                                  join c in _context.Users on o.CustomerId equals c.Id
-                                 where o.Id == query.Id && c.IsActive == false
+                                 where o.Id == query.Id
                                  select new OrderDTO()
                                  {
                                      Id = o.Id,

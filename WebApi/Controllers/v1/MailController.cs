@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using IMailService = Application.Services.IMailService;
+using Persistence.Services;
 
 namespace WebApi.Controllers.v1
 {
@@ -20,7 +20,7 @@ namespace WebApi.Controllers.v1
         {
             try
             {
-                await _mailService.SendMailAsync(request);
+                await _mailService.SendEmailAsync(request);
                 return Ok();
             }
             catch (Exception ex)
@@ -28,6 +28,7 @@ namespace WebApi.Controllers.v1
                 throw;
             }
         }
+
         //[HttpPost("welcome")]
         //public async Task<IActionResult> SendWelcomeMail([FromForm] WelcomeRequest request)
         //{

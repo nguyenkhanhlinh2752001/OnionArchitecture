@@ -26,7 +26,6 @@ namespace Application.Features.CustomerFeatures.Commands
                 }
                 else
                 {
-                    obj.IsActive = true;
 
                     await _context.SaveChangesAsync();
                     return obj.Id;

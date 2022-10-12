@@ -34,7 +34,7 @@ namespace Application.Features.CustomerFeatures.Commands
                 else
                 {
                     product.UserName = command.Username;
-                    product.Phone = command.Phone;
+                    product.PhoneNumber = command.Phone;
                     product.Address = command.Address;
 
                     await _context.SaveChangesAsync();

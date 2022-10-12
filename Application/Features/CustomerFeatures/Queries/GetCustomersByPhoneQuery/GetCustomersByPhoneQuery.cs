@@ -20,11 +20,11 @@ namespace Application.Features.CustomerFeatures.Queries.GetCustomersByPhoneQuery
             public async Task<IEnumerable<GetCustomerByPhoneViewModel>> Handle(GetCustomersByPhoneQuery query, CancellationToken token)
             {
                 var list = await (from c in _context.Users
-                                  where c.Phone.Contains(query.Phone)
+                                  where c.PhoneNumber.Contains(query.Phone)
                                   select new GetCustomerByPhoneViewModel
                                   {
                                       Name = c.UserName,
-                                      Phone = c.Phone,
+                                      Phone = c.PhoneNumber,
                                       Address = c.Address,
                                   }).ToListAsync();
                 return list.AsReadOnly();

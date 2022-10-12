@@ -27,10 +27,9 @@ namespace Application.Features.CustomerFeatures.Commands
             {
                 var obj = new User();
                 obj.UserName = command.Username;
-                obj.Phone = command.Phone;
+                obj.PhoneNumber = command.Phone;
                 obj.Address = command.Address;
-                obj.CreatedDate = DateTime.Now;
-                obj.IsActive = false;
+                obj.CreatedOn = DateTime.Now;
 
                 _context.Users.Add(obj);
                 await _context.SaveChangesAsync();

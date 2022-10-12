@@ -1,15 +1,17 @@
 ﻿using Application.Features.ProductFeatures.Commands;
 using Application.Features.ProductFeatures.Queries;
-using Application.Features.ProductFeatures.Queries.GetProductsByNameQuery;
-using Application.Features.ProductFeatures.Queries.GetProductsByPriceQuery;
+using Application.Features.ProductFeatures.Queries.GetProductsSearchQuery;
 using Application.Features.ProductFeatures.Queries.GetProductsSoldQuery;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Constants;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers.v1
 {
     public class ProductController : BaseApiController
     {
         [HttpPost]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> Create(CreateProductCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -28,12 +30,14 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
         }
 
         [HttpPut("[action]")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Update)]
         public async Task<IActionResult> Update(int id, UpdateProductCommand command)
         {
             if (id != command.Id)
@@ -44,21 +48,16 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("[action]")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Access)]
         public async Task<IActionResult> GetSold()
         {
             return Ok(await Mediator.Send(new GetProductsSoldQuery()));
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetByName(string name)
+        public async Task<IActionResult> Search(string? productName, string? categoryName, decimal? from, decimal? to)
         {
-            return Ok(await Mediator.Send(new GetProductsByNameQuery { Name = name }));
-        }
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetByPrice(decimal from, decimal to)
-        {
-            return Ok(await Mediator.Send(new GetProductsByPriceQuery { FromPrice = from, ToPrice = to }));
+            return Ok(await Mediator.Send(new GetProductsSearchQuery { ProductName = productName, CategoryName = categoryName, FromPrice = from, ToPrice = to }));
         }
     }
 }

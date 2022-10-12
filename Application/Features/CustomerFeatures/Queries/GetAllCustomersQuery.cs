@@ -22,7 +22,7 @@ namespace Application.Features.CustomerFeatures.Queries
             }
             public async Task<IEnumerable<User>> Handle(GetAllCustomersQuery query, CancellationToken cancellationToken)
             {
-                var list = await _context.Users.Where(p => p.IsActive == false).ToListAsync();
+                var list = await _context.Users.ToListAsync();
                 if (list == null)
                 {
                     return null;

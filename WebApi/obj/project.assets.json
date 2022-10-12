@@ -4336,9 +4336,11 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "Domain": "1.0.0",
+          "MailKit": "3.4.1",
           "Microsoft.EntityFrameworkCore": "6.0.9",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.9",
-          "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6"
+          "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6",
+          "MimeKit": "3.4.1"
         },
         "compile": {
           "bin/placeholder/Persistence.dll": {}
@@ -11888,6 +11890,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Application >= 1.0.0",
+      "MailKit >= 3.4.1",
       "MediatR >= 10.0.1",
       "MediatR.Extensions.Microsoft.DependencyInjection >= 10.0.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.9",
@@ -11898,6 +11901,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.9",
       "Microsoft.Extensions.Hosting >= 6.0.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.10",
+      "MimeKit >= 3.4.1",
       "Persistence >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0",
       "Swashbuckle.AspNetCore.Newtonsoft >= 6.4.0",
@@ -11956,6 +11960,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "MailKit": {
+            "target": "Package",
+            "version": "[3.4.1, )"
+          },
           "MediatR": {
             "target": "Package",
             "version": "[10.0.1, )"
@@ -11999,6 +12007,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[6.0.10, )"
+          },
+          "MimeKit": {
+            "target": "Package",
+            "version": "[3.4.1, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

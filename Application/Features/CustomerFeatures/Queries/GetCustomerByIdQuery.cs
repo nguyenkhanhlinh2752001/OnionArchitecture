@@ -19,7 +19,7 @@ namespace Application.Features.CustomerFeatures.Queries
 
             public async Task<User> Handle(GetCustomerByIdQuery query, CancellationToken cancellationToken)
             {
-                var obj = _context.Users.Where(a => a.Id == query.Id && a.IsActive == false).FirstOrDefault();
+                var obj = _context.Users.Where(a => a.Id == query.Id).FirstOrDefault();
                 if (obj == null) return null;
                 return obj;
             }

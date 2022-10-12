@@ -1,12 +1,12 @@
 ﻿using Domain.Entities;
 using MediatR;
 using Persistence.Context;
+using Persistence.Services;
 
 namespace Application.Features.OrderFeatures.Commands
 {
     public class CreateOrderCommand : IRequest<int>
     {
-        public string CustomerId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
 
@@ -14,9 +14,11 @@ namespace Application.Features.OrderFeatures.Commands
         public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
         {
             private readonly ApplicationDbContext _context;
-            public CreateOrderCommandHandler(ApplicationDbContext context)
+            private readonly ICurrentUserService _currentUserService;
+            public CreateOrderCommandHandler(ApplicationDbContext context, ICurrentUserService currentUserService)
             {
                 _context = context;
+                _currentUserService = currentUserService;
             }
             public async Task<int> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
             {
@@ -28,7 +30,7 @@ namespace Application.Features.OrderFeatures.Commands
                     {
                         var order = new Order()
                         {
-                            CustomerId = command.CustomerId,
+                            CustomerId = _currentUserService.Id,
                             CreatedDate = DateTime.Now,
                             IsDeleted = false
 
@@ -68,6 +70,8 @@ namespace Application.Features.OrderFeatures.Commands
                     throw;
                 }
             }
+
+            
         }
 
     }

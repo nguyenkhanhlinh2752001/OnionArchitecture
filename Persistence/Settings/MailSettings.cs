@@ -1,8 +1,8 @@
-﻿namespace Application.Settings
+﻿namespace Persistence.Settings
 {
     public class MailSettings
     {
-        public string Mail { get; set; }
+        public string Email { get; set; }
         public string DisplayName { get; set; }
         public string Password { get; set; }
         public string Host { get; set; }

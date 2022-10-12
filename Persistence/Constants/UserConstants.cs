@@ -2,7 +2,7 @@
 {
     public class UserConstants
     {
-        public const string Superadmin = "superadmin";
-        public const string DefaultPassword = "Abc123!@#";
+        public const string Superadmin = "admin";
+        public const string DefaultPassword = "admin";
     }
 }

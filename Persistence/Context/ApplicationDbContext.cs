@@ -19,6 +19,8 @@ namespace Persistence.Context
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Permission> Permissons { get; set; }
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<AppRoleClaim> AppRoleClaims { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {

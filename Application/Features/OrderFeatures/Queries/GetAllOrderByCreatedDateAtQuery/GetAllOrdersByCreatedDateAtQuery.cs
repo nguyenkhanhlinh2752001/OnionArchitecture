@@ -22,7 +22,7 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQ
                 var list = await (from o in _context.Orders
                                   join c in _context.Users
                                   on o.CustomerId equals c.Id
-                                  where o.CreatedDate.Date == query.CreatedDate.Date
+                                  where o.CreatedDate == query.CreatedDate.Date
                                   select new GetAllOrdersByCreatedDateAtViewModel
                                   {
                                       CustomerName = c.UserName,

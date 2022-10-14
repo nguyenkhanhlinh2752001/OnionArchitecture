@@ -6,7 +6,7 @@ namespace Application.Features.OrderFeatures.Commands
     public class UpdateOrderDetailCommand : IRequest<int>
     {
         public int OrderId { get; set; }
-        public int OrderDetailId { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
 
         public class UpdateOrderDetailCommandHandler : IRequestHandler<UpdateOrderDetailCommand, int>
@@ -23,7 +23,7 @@ namespace Application.Features.OrderFeatures.Commands
                 var dbContextTransaction = _context.Database.BeginTransaction();
                 try
                 {
-                    var orderDetail = _context.OrderDetails.Where(od => od.Id == command.OrderDetailId && od.OrderId == command.OrderId).FirstOrDefault();
+                    var orderDetail = _context.OrderDetails.Where(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId).FirstOrDefault();
                     var product = _context.Products.Where(p => p.Id == orderDetail.ProductId).FirstOrDefault();
 
                     var oldQuantity = orderDetail.Quantity;

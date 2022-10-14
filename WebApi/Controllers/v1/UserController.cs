@@ -1,9 +1,11 @@
 ﻿using Application.Features.CustomerFeatures.Queries;
-using Application.Features.CustomerFeatures.Queries.GetCustomersByPhoneQuery;
+using Application.Features.CustomerFeatures.Queries.GetUsersSearchQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Constants;
 using Persistence.DTOs;
 using Persistence.Services;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers.v1
 {
@@ -57,9 +59,19 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetByPhone(string phone)
+        [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Add)]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> Search(string? fullname, string? address, string? phone, bool? active, DateTime? from, DateTime? to)
         {
-            return Ok(await Mediator.Send(new GetCustomersByPhoneQuery { Phone = phone }));
+            return Ok(await Mediator.Send(new GetUsersSearchQuery
+            {
+                FullName = fullname,
+                Address = address,
+                PhoneNumber = phone,
+                IsActive = active,
+                CreatedFrom = from,
+                CreatedTo = to
+            }));
         }
 
         [HttpPost("Register")]
@@ -97,16 +109,15 @@ namespace WebApi.Controllers.v1
             var email = _currentUserService.Email;
             var id = _currentUserService.Id;
             var role = _currentUserService.Role;
-            var result = await UserService.ChangePassword(email, model);
+            var result = await UserService.ChangePassword(model);
             return Ok(result);
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut("Update")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Update(UpdateUserDTO model)
         {
-            var email = _currentUserService.Email;
-            var result = await UserService.UpdateUser(email, model);
+            var result = await UserService.UpdateUser(model);
             return Ok(result);
         }
     }

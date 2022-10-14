@@ -15,13 +15,13 @@ namespace Persistence.Services
 
         Task<AuthenticationVM> ResetPassword(ResetPasswordDTO model);
 
-        Task<AuthenticationVM> ChangePassword(string email, ChangePasswordDTO model);
+        Task<AuthenticationVM> ChangePassword(ChangePasswordDTO model);
 
         Task<string> CreateUser(CreateUserDTO model);
 
         Task<IEnumerable<GetAllUsersVM>> GetAllUsers();
 
-        Task<string> UpdateUser(string email, UpdateUserDTO model);
+        Task<string> UpdateUser(UpdateUserDTO model);
 
         Task<string> UnActiveUser(string id);
 

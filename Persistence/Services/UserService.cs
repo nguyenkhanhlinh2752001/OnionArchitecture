@@ -194,14 +194,15 @@ namespace Persistence.Services
             }
         }
 
-        public async Task<AuthenticationVM> ChangePassword(string email, ChangePasswordDTO model)
+        public async Task<AuthenticationVM> ChangePassword(ChangePasswordDTO model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var id = _currentUserService.Id;
+            var user = await _userManager.FindByIdAsync(id);
             var authenticationModel = new AuthenticationVM();
             if (user == null)
             {
                 authenticationModel.IsAuthenticated = false;
-                authenticationModel.Message = $"No Accounts Registered with {email}.";
+                authenticationModel.Message = $"No Accounts Registered with {user.Email}.";
                 return authenticationModel;
             }
             var rs = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
@@ -262,9 +263,10 @@ namespace Persistence.Services
             return list.AsReadOnly();
         }
 
-        public async Task<string> UpdateUser(string email, UpdateUserDTO model)
+        public async Task<string> UpdateUser(UpdateUserDTO model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var id = _currentUserService.Id;
+            var user = await _userManager.FindByIdAsync(id);
             user.FullName = model.FullName;
             user.Address = model.Address;
             user.PhoneNumber = model.Phone;

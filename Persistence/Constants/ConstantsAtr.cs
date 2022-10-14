@@ -10,5 +10,6 @@
         public const string CategoryPermission = "/category";
         public const string ProductPermission = "/product";
         public const string OrderPermission = "/order";
+        public const string UserPermission = "/user";
     }
 }

@@ -6,7 +6,7 @@ namespace Application.Features.OrderFeatures.Commands
     public class DeleteOrderDetailCommand : IRequest<int>
     {
         public int OrderId { get; set; }
-        public int OrderDetailId { get; set; }
+        public int ProductId { get; set; }
 
         public class DeleteOrderDetailCommandHandler : IRequestHandler<DeleteOrderDetailCommand, int>
         {
@@ -22,7 +22,7 @@ namespace Application.Features.OrderFeatures.Commands
                 var dbContextTransaction = _context.Database.BeginTransaction();
                 try
                 {
-                    var orderDetail = _context.OrderDetails.Where(od => od.Id == command.OrderDetailId && od.OrderId == command.OrderId).FirstOrDefault();
+                    var orderDetail = _context.OrderDetails.Where(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId).FirstOrDefault();
                     orderDetail.IsDeleted = true;
                     orderDetail.DeleledDate = DateTime.Now;
                     await _context.SaveChangesAsync();

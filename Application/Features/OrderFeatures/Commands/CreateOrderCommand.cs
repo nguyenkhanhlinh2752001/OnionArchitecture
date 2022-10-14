@@ -10,16 +10,17 @@ namespace Application.Features.OrderFeatures.Commands
         public int ProductId { get; set; }
         public int Quantity { get; set; }
 
-
         public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
         {
             private readonly ApplicationDbContext _context;
             private readonly ICurrentUserService _currentUserService;
+
             public CreateOrderCommandHandler(ApplicationDbContext context, ICurrentUserService currentUserService)
             {
                 _context = context;
                 _currentUserService = currentUserService;
             }
+
             public async Task<int> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
             {
                 var dbContextTransaction = _context.Database.BeginTransaction();
@@ -33,7 +34,6 @@ namespace Application.Features.OrderFeatures.Commands
                             CustomerId = _currentUserService.Id,
                             CreatedDate = DateTime.Now,
                             IsDeleted = false
-
                         };
                         _context.Orders.Add(order);
                         await _context.SaveChangesAsync();
@@ -61,7 +61,6 @@ namespace Application.Features.OrderFeatures.Commands
                     }
                     else
                         return 0;
-                    
                 }
                 catch (Exception)
                 {
@@ -70,9 +69,6 @@ namespace Application.Features.OrderFeatures.Commands
                     throw;
                 }
             }
-
-            
         }
-
     }
 }

@@ -19,7 +19,7 @@ namespace Persistence.Services
 
         Task<string> CreateUser(CreateUserDTO model);
 
-        Task<IEnumerable<GetAllUsersVM>> GetAllUsers();
+        Task<string> UpdateInfo(UpdateInfoDTO model);
 
         Task<string> UpdateUser(UpdateUserDTO model);
 

@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Exceptions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
 namespace Application.Features.OrderFeatures.Commands
@@ -9,7 +11,7 @@ namespace Application.Features.OrderFeatures.Commands
         public int ProductId { get; set; }
         public int Quantity { get; set; }
 
-        public class UpdateOrderDetailCommandHandler : IRequestHandler<UpdateOrderDetailCommand, int>
+        internal class UpdateOrderDetailCommandHandler : IRequestHandler<UpdateOrderDetailCommand, int>
         {
             private readonly ApplicationDbContext _context;
 
@@ -23,28 +25,28 @@ namespace Application.Features.OrderFeatures.Commands
                 var dbContextTransaction = _context.Database.BeginTransaction();
                 try
                 {
-                    var orderDetail = _context.OrderDetails.Where(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId).FirstOrDefault();
-                    var product = _context.Products.Where(p => p.Id == orderDetail.ProductId).FirstOrDefault();
-
+                    var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId);
+                    if (orderDetail == null) throw new ApiException("Order detail not found");
+                    var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == orderDetail.ProductId);
+                    if (product == null) throw new ApiException("Product not found");
                     var oldQuantity = orderDetail.Quantity;
                     var oldUnitPrice = orderDetail.Quantity * product.Price;
-
                     orderDetail.Quantity = command.Quantity;
                     await _context.SaveChangesAsync();
-
                     //update order total price and product quantity
-                    var order = _context.Orders.Where(o => o.Id == command.OrderId).FirstOrDefault();
+                    var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == command.OrderId);
+                    if (order == null) throw new ApiException("Order not found");
                     product.Quantity = product.Quantity + oldQuantity - command.Quantity;
                     order.TotalPrice = order.TotalPrice - oldUnitPrice + product.Price * command.Quantity;
                     await _context.SaveChangesAsync();
-
-                    dbContextTransaction.CommitAsync();
-                    dbContextTransaction.DisposeAsync();
-
+                    await dbContextTransaction.CommitAsync();
+                    await dbContextTransaction.DisposeAsync();
                     return order.Id;
                 }
                 catch (Exception)
                 {
+                    await dbContextTransaction.RollbackAsync();
+                    await dbContextTransaction.DisposeAsync();
                     throw;
                 }
             }

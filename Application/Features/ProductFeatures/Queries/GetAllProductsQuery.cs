@@ -17,7 +17,7 @@ namespace Application.Features.ProductFeatures.Queries
         public string? Order { get; set; }
         public string? SortBy { get; set; }
 
-        public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<IEnumerable<ProductDTO>>>
+        internal class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<IEnumerable<ProductDTO>>>
         {
             private readonly ApplicationDbContext _context;
 

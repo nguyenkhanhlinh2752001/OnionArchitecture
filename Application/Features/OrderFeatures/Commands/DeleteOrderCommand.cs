@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Exceptions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
 namespace Application.Features.OrderFeatures.Commands
@@ -7,7 +9,7 @@ namespace Application.Features.OrderFeatures.Commands
     {
         public int Id { get; set; }
 
-        public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand, int>
+        internal class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand, int>
         {
             private readonly ApplicationDbContext _context;
 
@@ -21,28 +23,29 @@ namespace Application.Features.OrderFeatures.Commands
                 var dbContextTransaction = _context.Database.BeginTransaction();
                 try
                 {
-                    var order = _context.Orders.Where(o => o.Id == command.Id).FirstOrDefault();
+                    var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == command.Id);
+                    if (order == null) throw new ApiException("Order not found");
                     var orderDetails = _context.OrderDetails.Where(od => od.OrderId == command.Id).ToList();
                     foreach (var orderDetail in orderDetails)
                     {
                         orderDetail.IsDeleted = true;
                         orderDetail.DeleledOn = DateTime.Now;
-                        var product = _context.Products.FirstOrDefault(p => p.Id == orderDetail.ProductId);
+                        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == orderDetail.ProductId);
+                        if (product == null) throw new ApiException("Product not found");
                         product.Quantity += orderDetail.Quantity;
                     }
                     order.IsDeleted = true;
                     order.DeleledOn = DateTime.Now;
                     await _context.SaveChangesAsync();
-
-                    dbContextTransaction.CommitAsync();
-                    dbContextTransaction.DisposeAsync();
+                    await dbContextTransaction.CommitAsync();
+                    await dbContextTransaction.DisposeAsync();
 
                     return order.Id;
                 }
                 catch (Exception)
                 {
-                    dbContextTransaction.RollbackAsync();
-                    dbContextTransaction.DisposeAsync();
+                    await dbContextTransaction.RollbackAsync();
+                    await dbContextTransaction.DisposeAsync();
                     throw;
                 }
             }

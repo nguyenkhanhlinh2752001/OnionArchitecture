@@ -3,13 +3,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
-namespace Application.Features.CustomerFeatures.Queries
+namespace Application.Features.UserFeatures.Queries
 {
     public class GetAllOrdersByCustomerIdQuery : IRequest<IEnumerable<OrderDTO>>
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
-        public class GetAllOrdersByCustomerIdQueryHandler : IRequestHandler<GetAllOrdersByCustomerIdQuery, IEnumerable<OrderDTO>>
+        internal class GetAllOrdersByCustomerIdQueryHandler : IRequestHandler<GetAllOrdersByCustomerIdQuery, IEnumerable<OrderDTO>>
         {
             private readonly ApplicationDbContext _context;
 

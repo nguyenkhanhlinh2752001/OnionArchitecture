@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
-namespace Application.Features.RoleFeatures.Queries.GetAllMenusByRoleId
+namespace Application.Features.PermissionFeatures.Queries.GetAllMenusByRoleId
 {
     public class GetAllMenuByRoleIdQuery : IRequest<IEnumerable<GetAllMenusByRoleIdQueryVM>>
     {
         public string Id { get; set; }
 
-        public class GetAllMenuByRoleIdQueryHandler : IRequestHandler<GetAllMenuByRoleIdQuery, IEnumerable<GetAllMenusByRoleIdQueryVM>>
+        internal class GetAllMenuByRoleIdQueryHandler : IRequestHandler<GetAllMenuByRoleIdQuery, IEnumerable<GetAllMenusByRoleIdQueryVM>>
         {
             private readonly ApplicationDbContext _context;
 

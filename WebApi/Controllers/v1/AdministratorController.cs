@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Features.UserFeatures.Queries.GetAllUsersQuery;
+using Application.Filter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Constants;
 using Persistence.DTOs;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers.v1
 {
@@ -9,14 +13,16 @@ namespace WebApi.Controllers.v1
     public class AdministratorController : BaseApiController
     {
         [HttpGet("AdminPage")]
-        [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Access)]
         public async Task<IActionResult> PostSecuredData()
         {
             return Ok("This Secured Data is available only for Administrator.");
         }
 
         [HttpPost("AddRole")]
-        [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> AddRoleAsync(AddRoleDTO model)
         {
             var result = await UserService.AddRoleAsync(model);
@@ -24,7 +30,8 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpPost("CreateUser")]
-        [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> CreateUser(CreateUserDTO model)
         {
             var result = await UserService.CreateUser(model);
@@ -32,18 +39,21 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("User")]
-        [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetAllUsers()
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Access)]
+        public async Task<IActionResult> GetAll(string? fullname, string? phone, string? address, bool? active, DateTime? from, DateTime? to, string? order, string? sortBy, [FromQuery] PaginationFilter filter)
         {
-            var result = await UserService.GetAllUsers();
-            return Ok(result);
+            return Ok(await Mediator.Send(new GetAllUsersQuery { FullName = fullname, PhoneNumber = phone, Address = address, IsActive = active, CreatedFrom = from, CreatedTo = to, Order = order, SortBy = sortBy, Filter = filter }));
         }
 
-        [HttpPut("UnActiveUser")]
-        [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> UnActiveUser(string email)
+
+
+        [HttpPut("Update")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Update)]
+        public async Task<IActionResult> Update([FromQuery] UpdateUserDTO model)
         {
-            var result = await UserService.UnActiveUser(email);
+            var result = await UserService.UpdateUser(model);
             return Ok(result);
         }
     }

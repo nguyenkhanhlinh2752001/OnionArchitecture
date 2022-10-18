@@ -9,7 +9,7 @@ namespace Application.Features.CategoryFeatures.Commands
     {
         public string Name { get; set; }
 
-        public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
+        internal class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
         {
             private readonly ApplicationDbContext _context;
             private readonly ICurrentUserService _currentUserService;
@@ -22,15 +22,17 @@ namespace Application.Features.CategoryFeatures.Commands
 
             public async Task<int> Handle(CreateCategoryCommand command, CancellationToken cancellationToken)
             {
-                var obj = new Category();
-                obj.Name = command.Name;
-                obj.CreatedOn = DateTime.Now;
-                obj.CreatedBy = _currentUserService.Id;
-                obj.IsDeleted = false;
+                var category = new Category()
+                {
+                    Name = command.Name,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = _currentUserService.Id,
+                    IsDeleted = false,
+                };
 
-                _context.Categories.Add(obj);
+                _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
-                return obj.Id;
+                return category.Id;
             }
         }
     }

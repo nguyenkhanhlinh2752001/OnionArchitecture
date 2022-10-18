@@ -6,7 +6,7 @@ namespace Application.Features.ProductFeatures.Queries.GetProductsSoldQuery
 {
     public class GetProductsSoldQuery : IRequest<IEnumerable<GetProductsSoldViewModel>>
     {
-        public class GetProductsSoldQueryHandler : IRequestHandler<GetProductsSoldQuery, IEnumerable<GetProductsSoldViewModel>>
+        internal class GetProductsSoldQueryHandler : IRequestHandler<GetProductsSoldQuery, IEnumerable<GetProductsSoldViewModel>>
         {
             private readonly ApplicationDbContext _context;
 

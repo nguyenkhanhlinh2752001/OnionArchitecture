@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Exceptions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
 namespace Application.Features.OrderFeatures.Commands
@@ -8,7 +10,7 @@ namespace Application.Features.OrderFeatures.Commands
         public int OrderId { get; set; }
         public int ProductId { get; set; }
 
-        public class DeleteOrderDetailCommandHandler : IRequestHandler<DeleteOrderDetailCommand, int>
+        internal class DeleteOrderDetailCommandHandler : IRequestHandler<DeleteOrderDetailCommand, int>
         {
             private readonly ApplicationDbContext _context;
 
@@ -23,17 +25,18 @@ namespace Application.Features.OrderFeatures.Commands
                 try
                 {
                     var orderDetail = _context.OrderDetails.Where(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId).FirstOrDefault();
+                    if (orderDetail == null) throw new ApiException("Order detail not found");
                     orderDetail.IsDeleted = true;
                     orderDetail.DeleledOn = DateTime.Now;
                     await _context.SaveChangesAsync();
-
                     //update order total price and product quantity
-                    var product = _context.Products.Where(p => p.Id == orderDetail.ProductId).FirstOrDefault();
-                    var order = _context.Orders.Where(o => o.Id == command.OrderId).FirstOrDefault();
+                    var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == orderDetail.ProductId);
+                    if (product == null) throw new ApiException("Product not found");
+                    var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == command.OrderId);
+                    if (order == null) throw new ApiException("Order not found");
                     order.TotalPrice = order.TotalPrice - orderDetail.Quantity * product.Price;
                     product.Quantity = product.Quantity + orderDetail.Quantity;
                     await _context.SaveChangesAsync();
-
                     await dbContextTransaction.CommitAsync();
                     await dbContextTransaction.DisposeAsync();
                     return orderDetail.Id;

@@ -3,14 +3,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
-namespace Application.Features.RoleFeatures.Commands.CreateMenuToRoleCommand
+namespace Application.Features.PermissionFeatures.Commands.CreateMenuToRoleCommand
 {
     public class CreateMenuToRoleCommand : IRequest<int>
     {
         public string RoleId { get; set; }
         public IEnumerable<CreateMenuToRoleCommandDTO> Menus { get; set; }
 
-        public class CreateMenuToRoleCommandHandler : IRequestHandler<CreateMenuToRoleCommand, int>
+        internal class CreateMenuToRoleCommandHandler : IRequestHandler<CreateMenuToRoleCommand, int>
         {
             private readonly ApplicationDbContext _context;
 
@@ -23,7 +23,6 @@ namespace Application.Features.RoleFeatures.Commands.CreateMenuToRoleCommand
             {
                 var listPer = await _context.Permissons.Where(p => p.RoleId.Equals(command.RoleId)).ToListAsync();
                 _context.Permissons.RemoveRange(listPer);
-
                 var per = command.Menus.Select(x => new Permission
                 {
                     RoleId = command.RoleId,
@@ -33,7 +32,6 @@ namespace Application.Features.RoleFeatures.Commands.CreateMenuToRoleCommand
                     CanDelete = x.CanDelete,
                     CanUpdate = x.CanUpdate,
                 });
-
                 await _context.Permissons.AddRangeAsync(per);
                 await _context.SaveChangesAsync();
                 return 1;

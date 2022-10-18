@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Exceptions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Services;
 
@@ -8,7 +10,7 @@ namespace Application.Features.ProductFeatures.Commands
     {
         public int Id { get; set; }
 
-        public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
+        internal class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
         {
             private readonly ApplicationDbContext _context;
             private readonly ICurrentUserService _currentUserService;
@@ -21,21 +23,13 @@ namespace Application.Features.ProductFeatures.Commands
 
             public async Task<int> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
-                var product = _context.Products.Where(a => a.Id == command.Id).FirstOrDefault();
-
-                if (product == null)
-                {
-                    return default;
-                }
-                else
-                {
-                    product.IsDeleted = true;
-                    product.DeleledOn = DateTime.Now;
-                    product.DeletedBy = _currentUserService.Id;
-
-                    await _context.SaveChangesAsync();
-                    return product.Id;
-                }
+                var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == command.Id);
+                if (product == null) throw new ApiException("Product not found");
+                product.IsDeleted = true;
+                product.DeleledOn = DateTime.Now;
+                product.DeletedBy = _currentUserService.Id;
+                await _context.SaveChangesAsync();
+                return product.Id;
             }
         }
     }

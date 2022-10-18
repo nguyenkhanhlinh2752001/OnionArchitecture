@@ -1,4 +1,4 @@
-﻿namespace Application.Features.RoleFeatures.Queries.GetAllMenusByRoleId
+﻿namespace Application.Features.PermissionFeatures.Queries.GetAllMenusByRoleId
 {
     public class GetAllMenusByRoleIdQueryVM
     {

@@ -1,14 +1,16 @@
-﻿using Domain.Entities;
+﻿using Application.Exceptions;
+using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
-namespace Application.Features.CustomerFeatures.Queries
+namespace Application.Features.UserFeatures.Queries
 {
     public class GetCustomerByIdQuery : IRequest<User>
     {
         public string Id { get; set; }
 
-        public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, User>
+        internal class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, User>
         {
             private readonly ApplicationDbContext _context;
 
@@ -19,9 +21,9 @@ namespace Application.Features.CustomerFeatures.Queries
 
             public async Task<User> Handle(GetCustomerByIdQuery query, CancellationToken cancellationToken)
             {
-                var obj = _context.Users.Where(a => a.Id == query.Id).FirstOrDefault();
-                if (obj == null) return null;
-                return obj;
+                var user = await _context.Users.FirstOrDefaultAsync(a => a.Id == query.Id);
+                if (user == null) throw new ApiException("User not found");
+                return user;
             }
         }
     }

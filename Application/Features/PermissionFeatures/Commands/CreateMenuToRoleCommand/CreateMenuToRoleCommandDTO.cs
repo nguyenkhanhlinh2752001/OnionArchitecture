@@ -1,4 +1,4 @@
-﻿namespace Application.Features.RoleFeatures.Commands.CreateMenuToRoleCommand
+﻿namespace Application.Features.PermissionFeatures.Commands.CreateMenuToRoleCommand
 {
     public class CreateMenuToRoleCommandDTO
     {

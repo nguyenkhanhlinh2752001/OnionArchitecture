@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Persistence.Constants;
@@ -251,19 +250,7 @@ namespace Persistence.Services
             }
         }
 
-        public async Task<IEnumerable<GetAllUsersVM>> GetAllUsers()
-        {
-            var list = await (from u in _context.Users
-                              select new GetAllUsersVM
-                              {
-                                  FullName = u.FullName,
-                                  Address = u.Address,
-                                  CreatedOn = u.CreatedOn
-                              }).ToListAsync();
-            return list.AsReadOnly();
-        }
-
-        public async Task<string> UpdateUser(UpdateUserDTO model)
+        public async Task<string> UpdateInfo(UpdateInfoDTO model)
         {
             var id = _currentUserService.Id;
             var user = await _userManager.FindByIdAsync(id);
@@ -271,7 +258,15 @@ namespace Persistence.Services
             user.Address = model.Address;
             user.PhoneNumber = model.Phone;
             user.UserName = model.Username;
+            await _context.SaveChangesAsync();
+            return $"{user.UserName} updated successfully";
+        }
 
+        public async Task<string> UpdateUser(UpdateUserDTO model)
+        {
+            var id = model.Id;
+            var user = await _userManager.FindByIdAsync(id);
+            user.IsActive = model.IsActive;
             await _context.SaveChangesAsync();
             return $"{user.UserName} updated successfully";
         }

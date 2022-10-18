@@ -24,7 +24,7 @@ namespace Application.Features.OrderFeatures.Commands
                 {
                     var orderDetail = _context.OrderDetails.Where(od => od.OrderId == command.OrderId && od.ProductId == command.ProductId).FirstOrDefault();
                     orderDetail.IsDeleted = true;
-                    orderDetail.DeleledDate = DateTime.Now;
+                    orderDetail.DeleledOn = DateTime.Now;
                     await _context.SaveChangesAsync();
 
                     //update order total price and product quantity

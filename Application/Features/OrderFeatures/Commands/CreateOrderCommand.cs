@@ -31,8 +31,8 @@ namespace Application.Features.OrderFeatures.Commands
                     {
                         var order = new Order()
                         {
-                            CustomerId = _currentUserService.Id,
-                            CreatedDate = DateTime.Now,
+                            UserId = _currentUserService.Id,
+                            CreatedOn = DateTime.Now,
                             IsDeleted = false
                         };
                         _context.Orders.Add(order);
@@ -43,7 +43,7 @@ namespace Application.Features.OrderFeatures.Commands
                             OrderId = order.Id,
                             ProductId = command.ProductId,
                             Quantity = command.Quantity,
-                            CreatedDate = DateTime.Now,
+                            CreatedOn = DateTime.Now,
                             IsDeleted = false,
                         };
                         _context.OrderDetails.Add(orderDetail);

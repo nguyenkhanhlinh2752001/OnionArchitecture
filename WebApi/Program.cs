@@ -28,14 +28,8 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Clean Architecture - NinePlus.ERP.WebApi",
-        Description = "This Api will be responsible for overall data distribution and authorization.",
-        Contact = new OpenApiContact
-        {
-            Name = "codewithmukesh",
-            Email = "hello@codewithmukesh.com",
-            Url = new Uri("https://codewithmukesh.com/contact"),
-        }
+        Title = "Clean Architecture - .Net Fo Rẻ Vờ Ỉn Mỳ Héart",
+        Description = "This Api will be responsible for overall data distribution and authorization."
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -108,6 +102,8 @@ builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddHttpContextAccessor();
 
 #region API Versioning
 

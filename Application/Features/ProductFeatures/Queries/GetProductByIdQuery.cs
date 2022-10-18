@@ -31,7 +31,7 @@ namespace Application.Features.ProductFeatures.Queries
                                Description = p.Description,
                                Price = p.Price,
                                Quantity = p.Quantity,
-                               CreatedDate = p.CreatedDate,
+                               CreatedDate = p.CreatedOn,
                            }).FirstOrDefault();
                 return obj;
             }

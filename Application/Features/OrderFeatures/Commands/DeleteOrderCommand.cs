@@ -26,12 +26,12 @@ namespace Application.Features.OrderFeatures.Commands
                     foreach (var orderDetail in orderDetails)
                     {
                         orderDetail.IsDeleted = true;
-                        orderDetail.DeleledDate = DateTime.Now;
+                        orderDetail.DeleledOn = DateTime.Now;
                         var product = _context.Products.FirstOrDefault(p => p.Id == orderDetail.ProductId);
                         product.Quantity += orderDetail.Quantity;
                     }
                     order.IsDeleted = true;
-                    order.DeleledDate = DateTime.Now;
+                    order.DeleledOn = DateTime.Now;
                     await _context.SaveChangesAsync();
 
                     dbContextTransaction.CommitAsync();

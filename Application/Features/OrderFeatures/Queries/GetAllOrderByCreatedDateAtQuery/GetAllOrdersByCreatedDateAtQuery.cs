@@ -21,13 +21,13 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQ
             {
                 var list = await (from o in _context.Orders
                                   join c in _context.Users
-                                  on o.CustomerId equals c.Id
-                                  where o.CreatedDate == query.CreatedDate.Date
+                                  on o.UserId equals c.Id
+                                  where o.CreatedOn == query.CreatedDate.Date
                                   select new GetAllOrdersByCreatedDateAtViewModel
                                   {
                                       CustomerName = c.UserName,
                                       TotalPrice = o.TotalPrice,
-                                      CreatedDate = o.CreatedDate
+                                      CreatedDate = o.CreatedOn
                                   }).ToListAsync();
                 return list.AsReadOnly();
             }

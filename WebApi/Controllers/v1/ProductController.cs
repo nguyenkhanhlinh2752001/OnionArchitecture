@@ -1,7 +1,8 @@
 ﻿using Application.Features.ProductFeatures.Commands;
 using Application.Features.ProductFeatures.Queries;
-using Application.Features.ProductFeatures.Queries.GetProductsSearchQuery;
 using Application.Features.ProductFeatures.Queries.GetProductsSoldQuery;
+using Application.Filter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Constants;
 using WebApi.Attributes;
@@ -11,16 +12,11 @@ namespace WebApi.Controllers.v1
     public class ProductController : BaseApiController
     {
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> Create(CreateProductCommand command)
         {
             return Ok(await Mediator.Send(command));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await Mediator.Send(new GetAllProductsQuery()));
         }
 
         [HttpGet("{id}")]
@@ -30,6 +26,7 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
@@ -37,6 +34,7 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpPut("[action]")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Update)]
         public async Task<IActionResult> Update(int id, UpdateProductCommand command)
         {
@@ -48,16 +46,17 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet("[action]")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Access)]
         public async Task<IActionResult> GetSold()
         {
             return Ok(await Mediator.Send(new GetProductsSoldQuery()));
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Search(string? productName, string? categoryName, decimal? from, decimal? to)
+        [HttpGet]
+        public async Task<IActionResult> GetAll(string? productName, string? categoryName, decimal? from, decimal? to, string? order, string? sortBy, [FromQuery] PaginationFilter filter)
         {
-            return Ok(await Mediator.Send(new GetProductsSearchQuery { ProductName = productName, CategoryName = categoryName, FromPrice = from, ToPrice = to }));
+            return Ok(await Mediator.Send(new GetAllProductsQuery { ProductName = productName, CategoryName = categoryName, FromPrice = from, ToPrice = to, Order = order, SortBy = sortBy, Filter = filter }));
         }
     }
 }

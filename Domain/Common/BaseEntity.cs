@@ -6,8 +6,10 @@ namespace Domain.Common
     {
         public int Id { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-        public DateTime? DeleledDate { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? DeleledOn { get; set; }
+        public string? DeletedBy { get; set; }
 
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }

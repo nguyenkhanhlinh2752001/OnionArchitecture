@@ -1,5 +1,6 @@
 ﻿using Application.Features.CategoryFeatures.Commands;
 using Application.Features.CategoryFeatures.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Constants;
 using WebApi.Attributes;
@@ -9,6 +10,7 @@ namespace WebApi.Controllers.v1
     public class CategoryController : BaseApiController
     {
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.CategoryPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> Create(CreateCategoryCommand command)
         {
@@ -16,6 +18,7 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.CategoryPermission, ConstantsAtr.Delete)]
         public async Task<IActionResult> Delete(int id)
         {

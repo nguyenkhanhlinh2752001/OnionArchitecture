@@ -1,5 +1,4 @@
-﻿using Application.Features.OrderFeatures.Queries.GetAllOrderByCreatedDateAtQuery;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
@@ -24,13 +23,13 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrdersByCreatedDateFr
             {
                 var list = await (from o in _context.Orders
                                   join c in _context.Users
-                                  on o.CustomerId equals c.Id
-                                  where (o.CreatedDate.Date >= query.CreatedDateFrom.Date) && (o.CreatedDate.Date <= query.CreatedDateTo.Date)
+                                  on o.UserId equals c.Id
+                                  where (o.CreatedOn.Date >= query.CreatedDateFrom.Date) && (o.CreatedOn.Date <= query.CreatedDateTo.Date)
                                   select new GetAllOrdersByCreatedDateFromToViewModel
                                   {
                                       CustomerName = c.UserName,
                                       TotalPrice = o.TotalPrice,
-                                      CreatedDate = o.CreatedDate
+                                      CreatedDate = o.CreatedOn
                                   }).ToListAsync();
                 return list.AsReadOnly();
             }

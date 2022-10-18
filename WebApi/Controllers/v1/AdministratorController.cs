@@ -8,7 +8,7 @@ namespace WebApi.Controllers.v1
     [ApiController]
     public class AdministratorController : BaseApiController
     {
-        [HttpPost("AdminPage")]
+        [HttpGet("AdminPage")]
         [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> PostSecuredData()
         {
@@ -39,7 +39,7 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        [HttpPut("UnActiveUser/{email}")]
+        [HttpPut("UnActiveUser")]
         [Authorize(Roles = "Administrator", AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UnActiveUser(string email)
         {

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.DTOs
+﻿namespace Application.DTOs
 {
-    public class ProductDTO: BaseDTO
+    public class ProductDTO : BaseDTO
     {
         public string ProductName { get; set; }
         public string CategoryName { get; set; }

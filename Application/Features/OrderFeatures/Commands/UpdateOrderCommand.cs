@@ -35,7 +35,7 @@ namespace Application.Features.OrderFeatures.Commands
                                 OrderId = command.OrderId,
                                 ProductId = command.ProductId,
                                 Quantity = command.Quantity,
-                                CreatedDate = DateTime.Now,
+                                CreatedOn = DateTime.Now,
                                 IsDeleted = false,
                             };
                             _context.OrderDetails.Add(orderDetail);

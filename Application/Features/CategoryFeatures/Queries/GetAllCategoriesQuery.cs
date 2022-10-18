@@ -10,6 +10,7 @@ namespace Application.Features.CategoryFeatures.Queries
         public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, IEnumerable<Category>>
         {
             private readonly ApplicationDbContext _context;
+
             public GetAllCategoriesQueryHandler(ApplicationDbContext context)
             {
                 _context = context;

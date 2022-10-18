@@ -21,14 +21,14 @@ namespace Application.Features.CustomerFeatures.Queries
             public async Task<IEnumerable<OrderDTO>> Handle(GetAllOrdersByCustomerIdQuery query, CancellationToken cancellationToken)
             {
                 var list = await (from o in _context.Orders
-                                  join c in _context.Users on o.CustomerId equals c.Id
+                                  join c in _context.Users on o.UserId equals c.Id
                                   where c.Id == query.Id && o.IsDeleted == false
                                   select new OrderDTO()
                                   {
                                       Id = o.Id,
                                       CustomerName = c.UserName,
                                       TotalPrice = o.TotalPrice,
-                                      CreatedDate = o.CreatedDate,
+                                      CreatedDate = o.CreatedOn,
                                       OrderDetails = (from p in _context.Products
                                                       join od in _context.OrderDetails
                                                       on p.Id equals od.ProductId

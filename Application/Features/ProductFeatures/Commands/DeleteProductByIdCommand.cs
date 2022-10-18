@@ -1,24 +1,24 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Persistence.Services;
 
 namespace Application.Features.ProductFeatures.Commands
 {
-    public class DeleteProductByIdCommand:IRequest<int>
+    public class DeleteProductByIdCommand : IRequest<int>
     {
         public int Id { get; set; }
+
         public class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, int>
         {
             private readonly ApplicationDbContext _context;
-            public DeleteProductByIdCommandHandler(ApplicationDbContext context)
+            private readonly ICurrentUserService _currentUserService;
+
+            public DeleteProductByIdCommandHandler(ApplicationDbContext context, ICurrentUserService currentUserService)
             {
                 _context = context;
+                _currentUserService = currentUserService;
             }
+
             public async Task<int> Handle(DeleteProductByIdCommand command, CancellationToken cancellationToken)
             {
                 var product = _context.Products.Where(a => a.Id == command.Id).FirstOrDefault();
@@ -30,7 +30,8 @@ namespace Application.Features.ProductFeatures.Commands
                 else
                 {
                     product.IsDeleted = true;
-                    product.DeleledDate = DateTime.Now;
+                    product.DeleledOn = DateTime.Now;
+                    product.DeletedBy = _currentUserService.Id;
 
                     await _context.SaveChangesAsync();
                     return product.Id;

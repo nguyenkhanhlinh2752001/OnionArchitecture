@@ -1,12 +1,7 @@
-﻿using Application.Features.ProductFeatures.Commands;
-using Domain.Entities;
+﻿using Domain.Entities;
 using MediatR;
 using Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Persistence.Services;
 
 namespace Application.Features.CategoryFeatures.Commands
 {
@@ -17,15 +12,20 @@ namespace Application.Features.CategoryFeatures.Commands
         public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
         {
             private readonly ApplicationDbContext _context;
-            public CreateCategoryCommandHandler(ApplicationDbContext context)
+            private readonly ICurrentUserService _currentUserService;
+
+            public CreateCategoryCommandHandler(ApplicationDbContext context, ICurrentUserService currentUserService)
             {
                 _context = context;
+                _currentUserService = currentUserService;
             }
+
             public async Task<int> Handle(CreateCategoryCommand command, CancellationToken cancellationToken)
             {
                 var obj = new Category();
                 obj.Name = command.Name;
-                obj.CreatedDate = DateTime.Now;
+                obj.CreatedOn = DateTime.Now;
+                obj.CreatedBy = _currentUserService.Id;
                 obj.IsDeleted = false;
 
                 _context.Categories.Add(obj);

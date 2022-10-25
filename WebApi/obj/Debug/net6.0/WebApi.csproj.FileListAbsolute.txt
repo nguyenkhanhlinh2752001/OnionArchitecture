@@ -289,3 +289,8 @@ D:\Intern\OnionArchitecture\WebApi\obj\Debug\net6.0\ref\WebApi.dll
 D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll
 D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\Microsoft.Extensions.Configuration.UserSecrets.dll
 D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\Microsoft.Extensions.Hosting.dll
+D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\WebApi.staticwebassets.runtime.json
+D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\FluentValidation.dll
+D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+D:\Intern\OnionArchitecture\WebApi\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

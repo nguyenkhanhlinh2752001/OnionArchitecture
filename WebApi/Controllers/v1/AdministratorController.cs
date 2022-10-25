@@ -1,5 +1,5 @@
-﻿using Application.Features.UserFeatures.Queries.GetAllUsersQuery;
-using Application.Filter;
+﻿using Application.Features.OrderFeatures.Queries.GetAllOrdersQuery;
+using Application.Features.UserFeatures.Queries.GetAllUsersQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Constants;
@@ -12,15 +12,12 @@ namespace WebApi.Controllers.v1
     [ApiController]
     public class AdministratorController : BaseApiController
     {
-        [HttpGet("AdminPage")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Access)]
-        public async Task<IActionResult> PostSecuredData()
-        {
-            return Ok("This Secured Data is available only for Administrator.");
-        }
-
-        [HttpPost("AddRole")]
+        /// <summary>
+        /// Add Role To User
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("role")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> AddRoleAsync(AddRoleDTO model)
@@ -29,7 +26,12 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        [HttpPost("CreateUser")]
+        /// <summary>
+        /// Administrator Create New User with role admin
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("user")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Add)]
         public async Task<IActionResult> CreateUser(CreateUserDTO model)
@@ -38,23 +40,63 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        [HttpGet("User")]
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet("user")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Access)]
-        public async Task<IActionResult> GetAll(string? fullname, string? phone, string? address, bool? active, DateTime? from, DateTime? to, string? order, string? sortBy, [FromQuery] PaginationFilter filter)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllUsersParameter query)
         {
-            return Ok(await Mediator.Send(new GetAllUsersQuery { FullName = fullname, PhoneNumber = phone, Address = address, IsActive = active, CreatedFrom = from, CreatedTo = to, Order = order, SortBy = sortBy, Filter = filter }));
+            return Ok(await Mediator.Send(new GetAllUsersQuery
+            {
+                FullName = query.FullName,
+                PhoneNumber = query.PhoneNumber,
+                Address = query.Address,
+                IsActive = query.IsActive,
+                CreatedFrom = query.CreatedFrom,
+                CreatedTo = query.CreatedTo,
+                Order = query.Order,
+                SortBy = query.SortBy,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }));
         }
 
-
-
-        [HttpPut("Update")]
+        /// <summary>
+        /// Admin update user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut("user")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.UserPermission, ConstantsAtr.Update)]
-        public async Task<IActionResult> Update([FromQuery] UpdateUserDTO model)
+        public async Task<IActionResult> Update(UpdateUserDTO model)
         {
             var result = await UserService.UpdateUser(model);
             return Ok(result);
+        }
+
+        [HttpGet]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Access)]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllOrdersQuery query)
+        {
+            return Ok(await Mediator.Send(new GetAllOrdersQuery
+            {
+                UserName = query.UserName,
+                PhoneNumber = query.PhoneNumber,
+                TotalPriceFrom = query.TotalPriceFrom,
+                TotalPriceTo = query.TotalPriceTo,
+                CreatedFrom = query.CreatedFrom,
+                CreatedTo = query.CreatedTo,
+                Order = query.Order,
+                SortBy = query.SortBy,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Wrappers;
+﻿using Application.Exceptions;
+using Application.Wrappers;
 using System.Net;
 using System.Text.Json;
 
@@ -23,17 +24,17 @@ namespace WebApi.Middlewares
             {
                 var response = context.Response;
                 response.ContentType = "application/json";
-                var responseModel = new Response<string>() { Succeeded = false, Message = error?.Message };
+                var responseModel = new Response<List<string>>() { Succeeded = false, Message = error?.Message };
 
                 switch (error)
                 {
-                    case Application.Exceptions.ApiException e:
+                    case ApiException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         responseModel.Message = error.Message;
                         break;
 
-                    case Application.Exceptions.UnauthorizeException e:
+                    case UnauthorizeException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         responseModel.Message = error.Message;
@@ -42,6 +43,12 @@ namespace WebApi.Middlewares
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
+
+                    case ValidationException e:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        responseModel.Succeeded = false;
+                        responseModel.Errors = e.Errors;
                         break;
 
                     default:

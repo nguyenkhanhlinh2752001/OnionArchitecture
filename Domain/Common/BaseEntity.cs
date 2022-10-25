@@ -10,6 +10,7 @@ namespace Domain.Common
         public string? CreatedBy { get; set; }
         public DateTime? DeleledOn { get; set; }
         public string? DeletedBy { get; set; }
+        public string? LastEditBy { get; set; }
 
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }

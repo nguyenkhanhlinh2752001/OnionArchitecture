@@ -1,5 +1,4 @@
-﻿using Application.Filter;
-using Application.Wrappers;
+﻿using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
@@ -8,7 +7,8 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrdersQuery
 {
     public class GetAllOrdersQuery : IRequest<PagedResponse<IEnumerable<GetAllOrdersQueryVM>>>
     {
-        public PaginationFilter Filter { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
         public string? Order { get; set; }
         public string? SortBy { get; set; }
         public string? UserName { get; set; }
@@ -29,7 +29,6 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrdersQuery
 
             public async Task<PagedResponse<IEnumerable<GetAllOrdersQueryVM>>> Handle(GetAllOrdersQuery query, CancellationToken cancellationToken)
             {
-                var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize);
                 var list = (from o in _context.Orders
                             join u in _context.Users on o.UserId equals u.Id
                             where (string.IsNullOrEmpty(query.UserName) || u.UserName.ToLower().Contains(query.UserName.ToLower()))
@@ -63,8 +62,8 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrdersQuery
                     _ => list
                 };
                 var total = list.Count();
-                var rs = await list.Skip((validFilter.PageNumber - 1) * validFilter.PageSize).Take(validFilter.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetAllOrdersQueryVM>>(list, validFilter.PageNumber, validFilter.PageSize, total));
+                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetAllOrdersQueryVM>>(list, query.PageNumber, query.PageSize, total));
             }
         }
     }

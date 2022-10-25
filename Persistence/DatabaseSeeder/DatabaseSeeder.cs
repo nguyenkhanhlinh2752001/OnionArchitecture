@@ -26,9 +26,10 @@ namespace Persistence.DatabaseSeeder
         {
             AddAdministrator();
             AddMenu();
+            AddProduct();
             AddPermisson();
             AddCategory();
-            
+
             _context.SaveChanges();
         }
 
@@ -90,8 +91,6 @@ namespace Persistence.DatabaseSeeder
             }).GetAwaiter().GetResult();
         }
 
-        
-
         private void AddMenu()
         {
             if (!_context.Menus.Any())
@@ -108,13 +107,25 @@ namespace Persistence.DatabaseSeeder
         {
             if (!_context.Categories.Any())
             {
-                _context.Categories.Add(new Category() { Name = "Lalala", CreatedOn = DateTime.Now, CreatedBy = "b4b1cfc8-5b00-450b-8800-cd5bc57b7213" });
-                _context.Categories.Add(new Category() { Name = "Lelele", CreatedOn = DateTime.Now, CreatedBy = "b4b1cfc8-5b00-450b-8800-cd5bc57b7213" });
-                _context.Categories.Add(new Category() { Name = "Lululu", CreatedOn = DateTime.Now, CreatedBy = "b4b1cfc8-5b00-450b-8800-cd5bc57b7213" });
+                _context.Categories.Add(new Category() { Name = "Lalala", CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP" });
+                _context.Categories.Add(new Category() { Name = "Lelele", CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP" });
+                _context.Categories.Add(new Category() { Name = "Lululu", CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP" });
             }
         }
 
-        
+        private void AddProduct()
+        {
+            if (!_context.Products.Any())
+            {
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product1", Barcode = "Barcode1", Description = "Description1", Rate = 4, Price = 10, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 45 });
+                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product2", Barcode = "Barcode2", Description = "Description2", Rate = 5, Price = 20, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 53 });
+                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product3", Barcode = "Barcode3", Description = "Description3", Rate = 4, Price = 30, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 67 });
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product4", Barcode = "Barcode4", Description = "Description4", Rate = 3, Price = 40, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 71 });
+                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product5", Barcode = "Barcode5", Description = "Description5", Rate = 4, Price = 50, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 114 });
+                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product6", Barcode = "Barcode6", Description = "Description6", Rate = 5, Price = 60, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 62 });
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product7", Barcode = "Barcode7", Description = "Description7", Rate = 4, Price = 70, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 93 });
+            }
+        }
 
         private void AddPermisson()
         {

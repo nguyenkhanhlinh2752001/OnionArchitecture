@@ -1,10 +1,13 @@
 ﻿using Persistence.Interfaces;
-using Persistence.Settings;
 
 namespace WebApi.Extensions
 {
     public static class AppExtention
     {
+        public static void UseSwaggerExtension(this IApplicationBuilder app)
+        {
+        }
+
         public static IApplicationBuilder InitializeDb(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();

@@ -8,7 +8,8 @@ namespace Application.Features.UserFeatures.Queries.GetAllUsersQuery
 {
     public class GetAllUsersQuery : IRequest<PagedResponse<IEnumerable<GetAllUsersQueryVM>>>
     {
-        public PaginationFilter Filter { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
         public string? Order { get; set; }
         public string? SortBy { get; set; }
         public string? FullName { get; set; }
@@ -29,7 +30,6 @@ namespace Application.Features.UserFeatures.Queries.GetAllUsersQuery
 
             public async Task<PagedResponse<IEnumerable<GetAllUsersQueryVM>>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
             {
-                var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize);
                 var list = (from u in _context.Users
                             where (string.IsNullOrEmpty(query.FullName) || u.FullName.ToLower().Contains(query.FullName.ToLower()))
                             && (string.IsNullOrEmpty(query.PhoneNumber) || u.PhoneNumber.Contains(query.PhoneNumber))
@@ -65,8 +65,8 @@ namespace Application.Features.UserFeatures.Queries.GetAllUsersQuery
                     _ => list
                 };
                 var total = list.Count();
-                var rs = await list.Skip((validFilter.PageNumber - 1) * validFilter.PageSize).Take(validFilter.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetAllUsersQueryVM>>(list, validFilter.PageNumber, validFilter.PageSize, total));
+                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetAllUsersQueryVM>>(list, query.PageNumber, query.PageSize, total));
             }
         }
     }

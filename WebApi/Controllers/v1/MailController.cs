@@ -18,15 +18,8 @@ namespace WebApi.Controllers.v1
         [HttpPost("send")]
         public async Task<IActionResult> SendMail([FromForm] MailRequest request)
         {
-            try
-            {
-                await _mailService.SendEmailAsync(request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            await _mailService.SendEmailAsync(request);
+            return Ok();
         }
 
         //[HttpPost("welcome")]

@@ -1,8 +1,10 @@
-﻿using Application.Features.OrderFeatures.Commands;
-using Application.Features.OrderFeatures.Queries;
+﻿using Application.Features.OrderFeatures.Commands.CreateOrderCommand;
+using Application.Features.OrderFeatures.Commands.DeleteOrderCommand;
+using Application.Features.OrderFeatures.Commands.DeleteOrderDetailCommand;
+using Application.Features.OrderFeatures.Commands.UpdateOrderCommand;
+using Application.Features.OrderFeatures.Commands.UpdateOrderDetailCommand;
 using Application.Features.OrderFeatures.Queries.GetAllOrdersQuery;
-using Application.Features.OrderFeatures.Queries.GetOrdersByUserIdQuery;
-using Application.Filter;
+using Application.Features.OrderFeatures.Queries.GetOrdersByIdQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Constants;
@@ -12,6 +14,11 @@ namespace WebApi.Controllers.v1
 {
     public class OrderController : BaseApiController
     {
+        /// <summary>
+        /// crrate an order
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Add)]
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -20,7 +27,12 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPut("[action]")]
+        /// <summary>
+        /// update order
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Update)]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateOrder(UpdateOrderCommand command)
@@ -28,7 +40,12 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPut("[action]")]
+        /// <summary>
+        /// update order detail
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut("order-detail/{id}")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Update)]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateOrderDetail(UpdateOrderDetailCommand command)
@@ -36,41 +53,39 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpDelete("[action]")]
+        /// <summary>
+        /// delete order detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("order-detail/{id}")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Delete)]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> DeleteOrderDetail(DeleteOrderDetailCommand command)
+        public async Task<IActionResult> DeleteOrderDetail(int id)
         {
-            return Ok(await Mediator.Send(command));
+            return Ok(await Mediator.Send(new DeleteOrderDetailCommand { Id = id }));
         }
 
-        [HttpDelete("[action]")]
+
+        /// <summary>
+        /// delete order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Delete)]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> DeleteOrder(DeleteOrderCommand command)
+        public async Task<IActionResult> DeleteOrder(int id)
         {
-            return Ok(await Mediator.Send(command));
+            return Ok(await Mediator.Send(new DeleteOrderCommand { Id = id }));
         }
 
-        [HttpGet]
-        [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Access)]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetAll(string? name, string? phone, decimal? fromPrice, decimal? toPrice, DateTime? fromDate, DateTime? toDate, string? order, string? sortBy, [FromQuery] PaginationFilter filter)
-        {
-            return Ok(await Mediator.Send(new GetAllOrdersQuery { UserName = name, PhoneNumber = phone, TotalPriceFrom = fromPrice, TotalPriceTo = toPrice, CreatedFrom = fromDate, CreatedTo = toDate, Order = order, SortBy = sortBy, Filter = filter }));
-        }
+        
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromQuery] int id)
+        public async Task<IActionResult> GetOrderById(int id)
         {
-            return Ok(await Mediator.Send(new GetOrderByIdQuery { Id = id }));
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetByUser(decimal? fromPrice, decimal? toPrice, DateTime? fromDate, DateTime? toDate, string? order, string? sortBy, [FromQuery] PaginationFilter filter)
-        {
-            return Ok(await Mediator.Send(new GetOrdersByUserIdQuery { FromPrice = fromPrice, ToPrice = toPrice, FromDate = fromDate, ToDate = toDate, Order = order, SortBy = sortBy, Filter = filter }));
+            return Ok(await Mediator.Send(new GetOrdersByIdQuery { Id = id }));
         }
     }
 }

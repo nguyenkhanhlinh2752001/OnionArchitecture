@@ -11,16 +11,16 @@ namespace Persistence.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private string _email;
+        private string _username;
         private string _id;
         private string _role;
 
-        public string Email
+        public string Username
         {
             get
             {
-                _email = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email) ?? "";
-                return _email;
+                _username = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name) ?? "";
+                return _username;
             }
         }
 

@@ -64,9 +64,9 @@ namespace Persistence.DatabaseSeeder
                 //Check if User Exists
                 var superUser = new User()
                 {
-                    FullName = "NinePlus Solution ERP",
-                    Email = "admin@example.com",
-                    UserName = "superadmin",
+                    FullName = "UserA",
+                    Email = "userA@example.com",
+                    UserName = "userA",
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
                     CreatedOn = DateTime.Now,
@@ -117,13 +117,13 @@ namespace Persistence.DatabaseSeeder
         {
             if (!_context.Products.Any())
             {
-                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product1", Barcode = "Barcode1", Description = "Description1", Rate = 4, Price = 10, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 45 });
-                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product2", Barcode = "Barcode2", Description = "Description2", Rate = 5, Price = 20, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 53 });
-                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product3", Barcode = "Barcode3", Description = "Description3", Rate = 4, Price = 30, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 67 });
-                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product4", Barcode = "Barcode4", Description = "Description4", Rate = 3, Price = 40, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 71 });
-                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product5", Barcode = "Barcode5", Description = "Description5", Rate = 4, Price = 50, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 114 });
-                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product6", Barcode = "Barcode6", Description = "Description6", Rate = 5, Price = 60, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 62 });
-                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product7", Barcode = "Barcode7", Description = "Description7", Rate = 4, Price = 70, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 93 });
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product1", Barcode = "Barcode1", Description = "Description1", Rate = 0, Price = 10, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 45 });
+                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product2", Barcode = "Barcode2", Description = "Description2", Rate = 0, Price = 20, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 53 });
+                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product3", Barcode = "Barcode3", Description = "Description3", Rate = 0, Price = 30, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 67 });
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product4", Barcode = "Barcode4", Description = "Description4", Rate = 0, Price = 40, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 71 });
+                _context.Products.Add(new Product() { CategoryId = 2, Name = "Product5", Barcode = "Barcode5", Description = "Description5", Rate = 0, Price = 50, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 114 });
+                _context.Products.Add(new Product() { CategoryId = 3, Name = "Product6", Barcode = "Barcode6", Description = "Description6", Rate = 0, Price = 60, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 62 });
+                _context.Products.Add(new Product() { CategoryId = 1, Name = "Product7", Barcode = "Barcode7", Description = "Description7", Rate = 0, Price = 70, CreatedOn = DateTime.Now, CreatedBy = "NinePlus Solution ERP", Quantity = 93 });
             }
         }
 
@@ -131,17 +131,17 @@ namespace Persistence.DatabaseSeeder
         {
             if (!_context.Permissons.Any())
             {
-                _context.Permissons.Add(new Permission() { RoleId = "fc2ba846-8d3f-4786-a5b0-b19ae195200d", MenuId = 1, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "fc2ba846-8d3f-4786-a5b0-b19ae195200d", MenuId = 2, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "fc2ba846-8d3f-4786-a5b0-b19ae195200d", MenuId = 3, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "fc2ba846-8d3f-4786-a5b0-b19ae195200d", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "fc2ba846-8d3f-4786-a5b0-b19ae195200d", MenuId = 5, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 1, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 2, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 3, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 5, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
 
-                _context.Permissons.Add(new Permission() { RoleId = "a5535804-d840-4ae7-8937-324d8282de8d", MenuId = 1, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "a5535804-d840-4ae7-8937-324d8282de8d", MenuId = 2, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "a5535804-d840-4ae7-8937-324d8282de8d", MenuId = 3, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "a5535804-d840-4ae7-8937-324d8282de8d", MenuId = 4, CanAccess = false, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "a5535804-d840-4ae7-8937-324d8282de8d", MenuId = 5, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 1, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 2, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 3, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 4, CanAccess = false, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 5, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
             }
         }
     }

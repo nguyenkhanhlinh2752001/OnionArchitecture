@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Interfaces.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 
@@ -9,16 +10,20 @@ namespace Application.Features.ProductFeatures.Queries.GetProductsSoldQuery
         internal class GetProductsSoldQueryHandler : IRequestHandler<GetProductsSoldQuery, IEnumerable<GetProductsSoldViewModel>>
         {
             private readonly ApplicationDbContext _context;
+            private readonly IProductRepsitory _productRepsitory;
+            private readonly ICategoryRepository _categoryRepository;
 
-            public GetProductsSoldQueryHandler(ApplicationDbContext context)
+            public GetProductsSoldQueryHandler(ApplicationDbContext context, IProductRepsitory productRepsitory, ICategoryRepository categoryRepository)
             {
                 _context = context;
+                _productRepsitory = productRepsitory;
+                _categoryRepository = categoryRepository;
             }
 
             public async Task<IEnumerable<GetProductsSoldViewModel>> Handle(GetProductsSoldQuery query, CancellationToken token)
             {
-                var list = await (from p1 in _context.Products
-                                  join c in _context.Categories
+                var list = await (from p1 in _productRepsitory.Entities
+                                  join c in _categoryRepository.Entities
                                   on p1.CategoryId equals c.Id
                                   select new GetProductsSoldViewModel
                                   {

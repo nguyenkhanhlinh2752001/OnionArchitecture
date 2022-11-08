@@ -1,9 +1,9 @@
-﻿using Application.Features.ProductFeatures.Commands.CreateProduct;
+﻿using Application.Features.ProductFeatures.Commands.AddEditProduct;
 using Application.Features.ProductFeatures.Commands.DeleteProductById;
-using Application.Features.ProductFeatures.Commands.UpdateProduct;
 using Application.Features.ProductFeatures.Queries.GetAllProducts;
 using Application.Features.ProductFeatures.Queries.GetProductById;
 using Application.Features.ProductFeatures.Queries.GetProductsSoldQuery;
+using Application.Features.ProductFeatures.Queries.GetReviewsByProductId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Constants;
@@ -16,7 +16,7 @@ namespace WebApi.Controllers.v1
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Add)]
-        public async Task<IActionResult> Create(CreateProductCommand command)
+        public async Task<IActionResult> Create(AddEditProductCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -35,17 +35,9 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
         }
 
-        [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Update)]
-        public async Task<IActionResult> Update(UpdateProductCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
         [HttpGet("sold")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Access)]
+        //[CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Access)]
         public async Task<IActionResult> GetSold()
         {
             return Ok(await Mediator.Send(new GetProductsSoldQuery()));
@@ -60,12 +52,25 @@ namespace WebApi.Controllers.v1
                 CategoryName = query.CategoryName,
                 FromPrice = query.FromPrice,
                 ToPrice = query.ToPrice,
-                FromRate=query.FromRate,
-                ToRate=query.ToRate,
+                FromRate = query.FromRate,
+                ToRate = query.ToRate,
                 Order = query.Order,
                 SortBy = query.SortBy,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
+            }));
+        }
+
+        [HttpGet("review")]
+        public async Task<IActionResult> GetReviewByProductId([FromQuery] GetReviewsByProductIdParametter query)
+        {
+            return Ok(await Mediator.Send(new GetReviewsByProductIdQuery
+            {
+                ProductId = query.ProductId,
+                OrderBy = query.OrderBy,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+                Rate = query.Rate,
             }));
         }
     }

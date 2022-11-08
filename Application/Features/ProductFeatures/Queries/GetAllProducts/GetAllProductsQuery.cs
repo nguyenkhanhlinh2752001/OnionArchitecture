@@ -1,7 +1,7 @@
-﻿using Application.Wrappers;
+﻿using Application.Interfaces.Repositories;
+using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
 
 namespace Application.Features.ProductFeatures.Queries.GetAllProducts
 {
@@ -20,17 +20,19 @@ namespace Application.Features.ProductFeatures.Queries.GetAllProducts
 
         internal class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<IEnumerable<GetAllProductsViewModel>>>
         {
-            private readonly ApplicationDbContext _context;
+            private readonly IProductRepsitory _productRepsitory;
+            private readonly ICategoryRepository _categoryRepository;
 
-            public GetAllProductsQueryHandler(ApplicationDbContext context)
+            public GetAllProductsQueryHandler(IProductRepsitory productRepsitory, ICategoryRepository categoryRepository)
             {
-                _context = context;
+                _productRepsitory = productRepsitory;
+                _categoryRepository = categoryRepository;
             }
 
             public async Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
             {
-                var list = (from p in _context.Products
-                            join c in _context.Categories on p.CategoryId equals c.Id
+                var list = (from p in _productRepsitory.Entities
+                            join c in _categoryRepository.Entities on p.CategoryId equals c.Id
                             where (string.IsNullOrEmpty(query.ProductName) || p.Name.ToLower().Contains(query.ProductName.ToLower()))
                             && (!query.FromPrice.HasValue || p.Price >= query.FromPrice.Value)
                             && (!query.ToPrice.HasValue || p.Price <= query.ToPrice.Value)

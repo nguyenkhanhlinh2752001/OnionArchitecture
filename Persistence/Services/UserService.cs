@@ -70,7 +70,7 @@ namespace Persistence.Services
             }
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Sid, user.Id)
@@ -107,6 +107,13 @@ namespace Persistence.Services
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, RoleConstants.CustomerRole.ToString());
+                    await _context.SaveChangesAsync();
+                    var cart = new Cart
+                    {
+                        UserId = user.Id
+                    };
+                    await _context.Carts.AddAsync(cart);
+                    await _context.SaveChangesAsync();
                 }
                 return $"User Registered successfully with username {user.UserName}";
             }

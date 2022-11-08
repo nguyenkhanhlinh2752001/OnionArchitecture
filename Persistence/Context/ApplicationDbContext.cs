@@ -1,20 +1,28 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Services;
 
 namespace Persistence.Context
 {
     public class ApplicationDbContext : IdentityDbContext<User>
 
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        private readonly ICurrentUserService _currentUserService;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService) : base(options)
         {
+            _currentUserService = currentUserService;
         }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartDetail> CartDetails { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Permission> Permissons { get; set; }
@@ -22,9 +30,24 @@ namespace Persistence.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<AppRoleClaim> AppRoleClaims { get; set; }
 
-        public async Task<int> SaveChangesAsync()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
         {
-            return await base.SaveChangesAsync();
+            foreach (var entry in ChangeTracker.Entries<IAuditableEntity>().ToList())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedOn = DateTime.Now;
+                        entry.Entity.CreatedBy = _currentUserService.Username;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedOn = DateTime.Now;
+                        entry.Entity.LastModifiedBy = _currentUserService.Username;
+                        break;
+                }
+            }
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -66,7 +89,6 @@ namespace Persistence.Context
             builder.Entity<AppRoleClaim>(entity =>
             {
                 entity.ToTable(name: "RoleClaims", "Identity");
-
             });
 
             builder.Entity<IdentityUserToken<string>>(entity =>

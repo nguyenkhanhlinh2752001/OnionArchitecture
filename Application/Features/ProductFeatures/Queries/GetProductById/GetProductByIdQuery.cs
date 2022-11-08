@@ -1,6 +1,6 @@
-﻿using Application.Wrappers;
+﻿using Application.Interfaces.Repositories;
+using Application.Wrappers;
 using MediatR;
-using Persistence.Context;
 
 namespace Application.Features.ProductFeatures.Queries.GetProductById
 {
@@ -10,17 +10,19 @@ namespace Application.Features.ProductFeatures.Queries.GetProductById
 
         internal class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Response<GetProductByIdViewModel>>
         {
-            private readonly ApplicationDbContext _context;
+            private readonly IProductRepsitory _productRepsitory;
+            private readonly ICategoryRepository _categoryRepository;
 
-            public GetProductByIdQueryHandler(ApplicationDbContext context)
+            public GetProductByIdQueryHandler(IProductRepsitory productRepsitory, ICategoryRepository categoryRepository)
             {
-                _context = context;
+                _productRepsitory = productRepsitory;
+                _categoryRepository = categoryRepository;
             }
 
             public async Task<Response<GetProductByIdViewModel>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
             {
-                var result = (from p in _context.Products
-                              join c in _context.Categories on p.CategoryId equals c.Id
+                var result = (from p in _productRepsitory.Entities
+                              join c in _categoryRepository.Entities on p.CategoryId equals c.Id
                               where p.Id == query.Id && p.IsDeleted == false
                               select new GetProductByIdViewModel()
                               {

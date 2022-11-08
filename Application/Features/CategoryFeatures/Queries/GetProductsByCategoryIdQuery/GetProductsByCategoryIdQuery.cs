@@ -1,49 +1,67 @@
-﻿using Application.ViewModels;
+﻿using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
 
 namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQuery
 {
-    public class GetProductsByCategoryIdQuery : IRequest<Response<GetProductsByCategoryIdQueryVM>>
+    public class GetProductsByCategoryIdQuery : IRequest<PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>>
     {
-        public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public string? Order { get; set; }
+        public string? SortBy { get; set; }
 
-        internal class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, Response<GetProductsByCategoryIdQueryVM>>
+        internal class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>>
         {
-            private readonly ApplicationDbContext _context;
+            private readonly ICategoryRepository _categoryRepository;
+            private readonly IProductRepsitory _productRepsitory;
 
-            public GetProductsByCategoryIdQueryHandler(ApplicationDbContext context)
+            public GetProductsByCategoryIdQueryHandler(ICategoryRepository categoryRepository, IProductRepsitory productRepsitory)
             {
-                _context = context;
+                _categoryRepository = categoryRepository;
+                _productRepsitory = productRepsitory;
             }
 
-            public async Task<Response<GetProductsByCategoryIdQueryVM>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
             {
-                var list = await (from c in _context.Categories
-                                  where c.Id == request.Id
-                                  select new GetProductsByCategoryIdQueryVM
-                                  {
-                                      CategoryId = c.Id,
-                                      CategoryName = c.Name,
-                                      Products = (from p in _context.Products
-                                                  join ct in _context.Categories
-                                                  on p.CategoryId equals ct.Id
-                                                  where p.CategoryId == request.Id
-                                                  select new ProductVM
-                                                  {
-                                                      ProductName = p.Name,
-                                                      CategoryName = c.Name,
-                                                      Barcode = p.Barcode,
-                                                      Description = p.Description,
-                                                      Rate = p.Rate,
-                                                      Price = p.Price,
-                                                      Quantity = p.Quantity,
-                                                      CreatedDate = p.CreatedOn
-                                                  }).ToList()
-                                  }).FirstOrDefaultAsync();
-                return new Response<GetProductsByCategoryIdQueryVM>(list);
+                var list = (from p in _productRepsitory.Entities
+                            join ct in _categoryRepository.Entities
+                            on p.CategoryId equals ct.Id
+                            where p.CategoryId == request.CategoryId
+                            select new GetProductsByCategoryIdVM
+                            {
+                                ProductName = p.Name,
+                                Description = p.Description,
+                                Rate = p.Rate,
+                                Price = p.Price,
+                                Quantity = p.Quantity
+                            });
+
+                list = request.Order switch
+                {
+                    "asc" => request.SortBy switch
+                    {
+                        "ProductName" => list.OrderBy(x => x.ProductName),
+                        "Description" => list.OrderBy(x => x.Description),
+                        "Rate" => list.OrderBy(x => x.Rate),
+                        "Price" => list.OrderBy(x => x.Price),
+                        "Quantity" => list.OrderBy(x => x.Quantity),
+                    },
+                    "desc" => request.SortBy switch
+                    {
+                        "ProductName" => list.OrderByDescending(x => x.ProductName),
+                        "Description" => list.OrderByDescending(x => x.Description),
+                        "Rate" => list.OrderByDescending(x => x.Rate),
+                        "Price" => list.OrderByDescending(x => x.Price),
+                        "Quantity" => list.OrderByDescending(x => x.Quantity),
+                    },
+                    _ => list
+                };
+                var total = list.Count();
+                var rs = await list.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                return new PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>(list, request.PageNumber, request.PageSize, total);
             }
         }
     }

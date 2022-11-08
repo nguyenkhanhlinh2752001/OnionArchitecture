@@ -4,10 +4,11 @@ using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using Application.Interfaces.Repositories;
 
 namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
 {
-    public class GetAllCategoriesQuery : IRequest<PagedResponse<IEnumerable<GetAllCategoriesQueryVM>>>
+    public class GetAllCategoriesQuery : IRequest<PagedResponse<IEnumerable<GetAllCategoriesVM>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
@@ -18,30 +19,32 @@ namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
         public DateTime? ToDate { get; set; }
         public string? CreatedBy { get; set; }
 
-        internal class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<IEnumerable<GetAllCategoriesQueryVM>>>
+        internal class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<IEnumerable<GetAllCategoriesVM>>>
         {
-            private readonly ApplicationDbContext _context;
+            private readonly ICategoryRepository _categoryRepository;
+            private readonly IProductRepsitory _productRepsitory;
 
-            public GetAllCategoriesQueryHandler(ApplicationDbContext context)
+            public GetAllCategoriesQueryHandler( ICategoryRepository categoryRepository, IProductRepsitory productRepsitory)
             {
-                _context = context;
+                _categoryRepository = categoryRepository;
+                _productRepsitory = productRepsitory;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetAllCategoriesQueryVM>>> Handle(GetAllCategoriesQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetAllCategoriesVM>>> Handle(GetAllCategoriesQuery query, CancellationToken cancellationToken)
             {
-                var list = (from c in _context.Categories
+                var list = (from c in _categoryRepository.Entities
                             where (string.IsNullOrEmpty(query.Name) || c.Name.ToLower().Contains(query.Name.ToLower()))
                             && (string.IsNullOrEmpty(query.CreatedBy) || c.CreatedBy.Contains(query.CreatedBy))
                             && (!query.FromDate.HasValue || c.CreatedOn <= query.FromDate.Value)
                             && (!query.ToDate.HasValue || c.CreatedOn >= query.ToDate.Value)
-                            select new GetAllCategoriesQueryVM()
+                            select new GetAllCategoriesVM()
                             {
                                 Id = c.Id,
                                 Name = c.Name,
                                 CreatedBy = c.CreatedBy,
                                 CreatedOn = c.CreatedOn,
-                                Products = (from p in _context.Products
-                                            join v in _context.Categories
+                                Products = (from p in _productRepsitory.Entities
+                                            join v in _categoryRepository.Entities
                                             on p.CategoryId equals c.Id
                                             select new ProductVM
                                             {
@@ -61,18 +64,21 @@ namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
                     "asc" => query.SortBy switch
                     {
                         "Name" => list.OrderBy(x => x.Name),
-                        "Date" => list.OrderBy(x => x.CreatedOn)
+                        "CreatedBy" => list.OrderBy(x => x.CreatedBy),
+                        "CreatedOn"=>list.OrderBy(x=>x.CreatedOn)
                     },
                     "desc" => query.SortBy switch
                     {
                         "Name" => list.OrderByDescending(x => x.Name),
-                        "Date" => list.OrderByDescending(x => x.CreatedOn)
+                        "CreatedBy" => list.OrderByDescending(x => x.CreatedBy),
+                        "CreatedOn" => list.OrderByDescending(x => x.CreatedOn)
                     },
                     _ => list
                 };
                 var total = list.Count();
                 var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetAllCategoriesQueryVM>>(list, query.PageNumber, query.PageSize, total));
+
+                return (new PagedResponse<IEnumerable<GetAllCategoriesVM>>(list, query.PageNumber, query.PageSize, total));
             }
         }
     }

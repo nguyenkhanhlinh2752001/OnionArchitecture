@@ -47,6 +47,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[11.2.2, )"
@@ -54,6 +62,10 @@
             "FluentValidation.DependencyInjectionExtensions": {
               "target": "Package",
               "version": "[11.2.2, )"
+            },
+            "LazyCache": {
+              "target": "Package",
+              "version": "[2.4.0, )"
             },
             "MailKit": {
               "target": "Package",
@@ -70,6 +82,10 @@
             "MimeKit": {
               "target": "Package",
               "version": "[3.4.1, )"
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.2.22, )"
             }
           },
           "imports": [
@@ -296,6 +312,14 @@
             "FluentValidation.AspNetCore": {
               "target": "Package",
               "version": "[11.2.2, )"
+            },
+            "LazyCache": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "LazyCache.AspNetCore": {
+              "target": "Package",
+              "version": "[2.4.0, )"
             },
             "MailKit": {
               "target": "Package",

@@ -1,41 +1,33 @@
 ﻿using Application.Exceptions;
+using Application.Interfaces.Repositories;
 using Application.Wrappers;
-using Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Persistence.Context;
-using Persistence.Services;
 
 namespace Application.Features.CategoryFeatures.Commands.DeleteCategoryByIdCommand
 {
-    public class DeleteCategoryByIdCommand : IRequest<Response<int>>
+    public class DeleteCategoryByIdCommand : IRequest<Response<DeleteCategoryByIdCommand>>
     {
         public int Id { get; set; }
 
-        internal class DeleteCategoryByIdCommandHandler : IRequestHandler<DeleteCategoryByIdCommand, Response<int>>
+        internal class DeleteCategoryByIdCommandHandler : IRequestHandler<DeleteCategoryByIdCommand, Response<DeleteCategoryByIdCommand>>
         {
-            private readonly ApplicationDbContext _context;
-            private readonly ICurrentUserService _currentUserService;
-            private readonly UserManager<User> _userManager;
+            private readonly ICategoryRepository _categoryRepository;
+            private readonly IUnitOfWork<int> _unitOfWork;
 
-            public DeleteCategoryByIdCommandHandler(ApplicationDbContext context, ICurrentUserService currentUserService, UserManager<User> userManager)
+            public DeleteCategoryByIdCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork<int> unitOfWork)
             {
-                _context = context;
-                _currentUserService = currentUserService;
-                _userManager = userManager;
+                _categoryRepository = categoryRepository;
+                _unitOfWork = unitOfWork;
             }
 
-            public async Task<Response<int>> Handle(DeleteCategoryByIdCommand request, CancellationToken cancellationToken)
+            public async Task<Response<DeleteCategoryByIdCommand>> Handle(DeleteCategoryByIdCommand request, CancellationToken cancellationToken)
             {
-                var id = _currentUserService.Id;
-                var user = await _userManager.FindByIdAsync(id);
-                var category = _context.Categories.Where(a => a.Id == request.Id).FirstOrDefault();
+                var category = await _categoryRepository.FindAsync(x => x.Id == request.Id && !x.IsDeleted);
                 if (category == null) throw new ApiException("Category not found");
                 category.IsDeleted = true;
-                category.DeleledOn = DateTime.Now;
-                category.DeletedBy = user.FullName;
-                await _context.SaveChangesAsync();
-                return new Response<int>(category.Id);
+                await _categoryRepository.UpdateAsync(category);
+                await _unitOfWork.Commit(cancellationToken);
+                return new Response<DeleteCategoryByIdCommand>(request);
             }
         }
     }

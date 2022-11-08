@@ -79,24 +79,6 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        [HttpGet]
-        [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Access)]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllOrdersQuery query)
-        {
-            return Ok(await Mediator.Send(new GetAllOrdersQuery
-            {
-                UserName = query.UserName,
-                PhoneNumber = query.PhoneNumber,
-                TotalPriceFrom = query.TotalPriceFrom,
-                TotalPriceTo = query.TotalPriceTo,
-                CreatedFrom = query.CreatedFrom,
-                CreatedTo = query.CreatedTo,
-                Order = query.Order,
-                SortBy = query.SortBy,
-                PageNumber = query.PageNumber,
-                PageSize = query.PageSize
-            }));
-        }
+        
     }
 }

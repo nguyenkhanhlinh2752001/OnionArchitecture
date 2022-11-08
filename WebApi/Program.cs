@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.Extensions;
 using Application.Features.CategoryFeatures.Commands.CreateCategoryCommand;
 using FluentValidation.AspNetCore;
 using Persistence;
@@ -32,6 +33,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioningService();
 
 builder.Services.AddControllers();
+
+builder.Services.AddCoreApplication();
+
+builder.Services.AddLazyCache();
 
 var app = builder.Build();
 

@@ -22,9 +22,9 @@ namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
         internal class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<IEnumerable<GetAllCategoriesVM>>>
         {
             private readonly ICategoryRepository _categoryRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
 
-            public GetAllCategoriesQueryHandler( ICategoryRepository categoryRepository, IProductRepsitory productRepsitory)
+            public GetAllCategoriesQueryHandler( ICategoryRepository categoryRepository, IProductRepository productRepsitory)
             {
                 _categoryRepository = categoryRepository;
                 _productRepsitory = productRepsitory;
@@ -54,8 +54,6 @@ namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
                                                 CategoryName = c.Name,
                                                 CreatedDate = p.CreatedOn,
                                                 Description = p.Description,
-                                                Quantity = p.Quantity,
-                                                Price = p.Price,
                                                 Rate = p.Rate
                                             }).ToList()
                             });

@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IOrderDetailRepository : IRepositoryAsync<OrderDetail, int>
+    public interface IOrderDetailRepository : RepositoryAsync<OrderDetail, int>
     {
     }
 }

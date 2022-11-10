@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IProductRepsitory : IRepositoryAsync<Product, int>
+    public interface IImageReviewRepository : RepositoryAsync<ImageReview, int>
     {
     }
 }

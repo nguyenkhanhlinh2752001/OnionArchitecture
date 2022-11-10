@@ -19,9 +19,9 @@ namespace Application.Features.ReviewFeatures.Queries.GetReviewByUserId
         {
             private readonly IReviewRepository _reviewRepository;
             private readonly ICurrentUserService _currentUserService;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
 
-            public GetReviewByUserIdQueryHandler(IReviewRepository reviewRepository, ICurrentUserService currentUserService, IProductRepsitory productRepsitory)
+            public GetReviewByUserIdQueryHandler(IReviewRepository reviewRepository, ICurrentUserService currentUserService, IProductRepository productRepsitory)
             {
                 _reviewRepository = reviewRepository;
                 _currentUserService = currentUserService;
@@ -33,8 +33,9 @@ namespace Application.Features.ReviewFeatures.Queries.GetReviewByUserId
                 var userId = _currentUserService.Id;
                 var list = (from p in _productRepsitory.Entities
                             join r in _reviewRepository.Entities
-                            on p.Id equals r.ProductId
+                            on p.Id equals r.ProductDetailId
                             where r.UserId == userId
+                            && r.IsCheck == true
                             && (string.IsNullOrEmpty(request.ProductName) || p.Name.ToLower().Contains(request.ProductName.ToLower()))
                             && (!request.Rate.HasValue || r.Rate == request.Rate.Value)
                             select new GetReviewByUserIdViewModel

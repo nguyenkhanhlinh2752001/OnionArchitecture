@@ -9,10 +9,11 @@ namespace Application.Features.ReviewFeatures.Commands.AddEditReview
 {
     public class AddEditReviewCommand : IRequest<Response<AddEditReviewCommand>>
     {
-        public int ProductId { get; set; }
+        public int ProductDetailId { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
         public int Rate { get; set; }
+        public IEnumerable<string>? Images { get; set; }
 
         internal class AddEditReviewCommandHandler : IRequestHandler<AddEditReviewCommand, Response<AddEditReviewCommand>>
         {
@@ -32,7 +33,7 @@ namespace Application.Features.ReviewFeatures.Commands.AddEditReview
             public async Task<Response<AddEditReviewCommand>> Handle(AddEditReviewCommand request, CancellationToken cancellationToken)
             {
                 var userId = _currentUserService.Id;
-                var review = await _reviewRepository.FindAsync(x => x.UserId == userId && x.ProductId == request.ProductId);
+                var review = await _reviewRepository.FindAsync(x => x.UserId == userId );
                 if (review == null)
                 {
                     var addReview = _mapper.Map<Review>(request);

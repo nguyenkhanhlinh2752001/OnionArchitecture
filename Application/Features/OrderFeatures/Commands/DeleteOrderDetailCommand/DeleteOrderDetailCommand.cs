@@ -13,11 +13,11 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderDetailCommand
         internal class DeleteOrderDetailCommandHandler : IRequestHandler<DeleteOrderDetailCommand, Response<DeleteOrderDetailCommand>>
         {
             private readonly IOrderDetailRepository _orderDetailRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly IUnitOfWork<int> _unitOfWork;
             private readonly IMapper _mapper;
 
-            public DeleteOrderDetailCommandHandler(IOrderDetailRepository orderDetailRepository, IUnitOfWork<int> unitOfWork, IMapper mapper, IProductRepsitory productRepsitory)
+            public DeleteOrderDetailCommandHandler(IOrderDetailRepository orderDetailRepository, IUnitOfWork<int> unitOfWork, IMapper mapper, IProductRepository productRepsitory)
             {
                 _orderDetailRepository = orderDetailRepository;
                 _unitOfWork = unitOfWork;
@@ -35,7 +35,7 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderDetailCommand
 
                 var product = await _productRepsitory.FindAsync(x => x.Id == orderdetail.ProductId && !x.IsDeleted);
                 if (product == null) throw new ApiException("Product not found");
-                product.Quantity = product.Quantity + orderdetail.Quantity;
+                //product.Quantity = product.Quantity + orderdetail.Quantity;
                 await _productRepsitory.UpdateAsync(product);
                 await _unitOfWork.Commit(cancellationToken);
 

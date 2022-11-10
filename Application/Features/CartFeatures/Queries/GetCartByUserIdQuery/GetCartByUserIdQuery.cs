@@ -12,10 +12,10 @@ namespace Application.Features.CartFeatures.Queries.GetCartByUserIdCommand
         {
             private readonly ICurrentUserService _currentUserService;
             private readonly ICartDetailRepository _cartDetailRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly ICartRepository _cartRepository;
 
-            public GetCartByUserIdQueryHandler(ICurrentUserService currentUserService, ICartDetailRepository cartDetailRepository, ICartRepository cartRepository, IProductRepsitory productRepsitory)
+            public GetCartByUserIdQueryHandler(ICurrentUserService currentUserService, ICartDetailRepository cartDetailRepository, ICartRepository cartRepository, IProductRepository productRepsitory)
             {
                 _currentUserService = currentUserService;
                 _cartDetailRepository = cartDetailRepository;
@@ -38,8 +38,8 @@ namespace Application.Features.CartFeatures.Queries.GetCartByUserIdCommand
                                 CartDetailId = cd.Id,
                                 ProductName = p.Name,
                                 Quantity = cd.Quantity,
-                                Price = p.Price,
-                                ToTal = p.Price * cd.Quantity
+                                //Price = p.Price,
+                                //ToTal = p.Price * cd.Quantity
                             }).ToList();
                 return new Response<IEnumerable<GetCartByUserIdViewModel>>(list);
             }

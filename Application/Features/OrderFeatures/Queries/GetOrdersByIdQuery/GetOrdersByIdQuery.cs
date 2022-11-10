@@ -37,9 +37,9 @@ namespace Application.Features.OrderFeatures.Queries.GetOrdersByIdQuery
                                                         select new OrderDetailVM
                                                         {
                                                             ProductName = p.Name,
-                                                            Price = p.Price,
+                                                            //Price = p.Price,
                                                             Quantity = od.Quantity,
-                                                            UnitPrice = p.Price * od.Quantity,
+                                                           // UnitPrice = p.Price * od.Quantity,
                                                         }).ToList()
                                     }).FirstOrDefaultAsync();
                 return new Response<GetOrdersByIdViewModel>(result);

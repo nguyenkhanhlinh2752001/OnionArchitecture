@@ -1,4 +1,6 @@
-﻿namespace Application.Features.ProductFeatures.Queries.GetProductById
+﻿using Application.Dtos.Products;
+
+namespace Application.Features.ProductFeatures.Queries.GetProductById
 {
     public class GetProductByIdViewModel
     {
@@ -8,7 +10,7 @@
         public string Barcode { get; set; }
         public string Description { get; set; }
         public decimal Rate { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public IEnumerable<ProductDetailDto>? ProductDetails { get; set; }
+        public IEnumerable<ImageProductDto>? Images { get; set; }
     }
 }

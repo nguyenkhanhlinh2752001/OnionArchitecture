@@ -16,11 +16,11 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
             private readonly ApplicationDbContext _context;
             private readonly IOrderRespository _orderRespository;
             private readonly IOrderDetailRepository _orderDetailRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly IMapper _mapper;
             private readonly IUnitOfWork<int> _unitOfWork;
 
-            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IUnitOfWork<int> unitOfWork, IProductRepsitory productRepsitory)
+            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IUnitOfWork<int> unitOfWork, IProductRepository productRepsitory)
             {
                 _context = context;
                 _orderRespository = orderRespository;
@@ -47,7 +47,6 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
 
                     var product = await _productRepsitory.FindAsync(x => x.Id == item.ProductId);
                     if (product == null) throw new ApiException("Product not found");
-                    product.Quantity = product.Quantity + item.Quantity;
                     await _productRepsitory.UpdateAsync(product);
                     await _unitOfWork.Commit(cancellationToken);
                 }

@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces.Repositories
 {
-    public interface ICartDetailRepository : IRepositoryAsync<CartDetail, int>
+    public interface ICartDetailRepository : RepositoryAsync<CartDetail, int>
     {
     }
 }

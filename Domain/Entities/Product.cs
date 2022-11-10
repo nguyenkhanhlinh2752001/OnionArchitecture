@@ -9,9 +9,6 @@ namespace Domain.Entities
         public string Barcode { get; set; } = currentTime();
         public string Description { get; set; }
         public decimal? Rate { get; set; } = 0;
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-        public string? Supplier { get; set; }
 
         private static string currentTime()
         {

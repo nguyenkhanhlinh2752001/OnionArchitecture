@@ -18,11 +18,11 @@ namespace Application.Features.ProductFeatures.Commands.AddEditProduct
 
         internal class CreateProductCommandHandler : IRequestHandler<AddEditProductCommand, Response<AddEditProductCommand>>
         {
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly IUnitOfWork<int> _unitOfWork;
             private readonly IMapper _mapper;
 
-            public CreateProductCommandHandler(IProductRepsitory productRepsitory, IUnitOfWork<int> unitOfWork, IMapper mapper)
+            public CreateProductCommandHandler(IProductRepository productRepsitory, IUnitOfWork<int> unitOfWork, IMapper mapper)
             {
                 _productRepsitory = productRepsitory;
                 _unitOfWork = unitOfWork;

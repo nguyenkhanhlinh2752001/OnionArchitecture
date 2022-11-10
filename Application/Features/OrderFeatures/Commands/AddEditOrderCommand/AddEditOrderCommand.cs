@@ -17,12 +17,12 @@ namespace Application.Features.OrderFeatures.Commands.AddEditOrderCommand
         {
             private readonly IOrderRespository _orderRespository;
             private readonly IOrderDetailRepository _orderDetailRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly ICurrentUserService _currentUserService;
             private readonly IUnitOfWork<int> _unitOfWork;
             private readonly IMapper _mapper;
 
-            public CreateOrderCommandHanler(IOrderRespository orderRespository, IUnitOfWork<int> unitOfWork, IMapper mapper, IOrderDetailRepository orderDetailRepository, ICurrentUserService currentUserService, IProductRepsitory productRepsitory)
+            public CreateOrderCommandHanler(IOrderRespository orderRespository, IUnitOfWork<int> unitOfWork, IMapper mapper, IOrderDetailRepository orderDetailRepository, ICurrentUserService currentUserService, IProductRepository productRepsitory)
             {
                 _orderRespository = orderRespository;
                 _unitOfWork = unitOfWork;
@@ -65,7 +65,6 @@ namespace Application.Features.OrderFeatures.Commands.AddEditOrderCommand
                             await _orderDetailRepository.AddAsync(addOrderdetail);
                             var product = await _productRepsitory.FindAsync(x => x.Id == addOrderdetail.ProductId);
                             if (product == null) throw new ApiException("Product not found");
-                            product.Quantity = product.Quantity - addOrderdetail.Quantity;
                             _mapper.Map(product, product);
                             await _productRepsitory.UpdateAsync(product);
                             await _unitOfWork.Commit(cancellationToken);
@@ -77,7 +76,6 @@ namespace Application.Features.OrderFeatures.Commands.AddEditOrderCommand
                             var product = await _productRepsitory.FindAsync(x => x.Id == orderDetail.ProductId);
                             await _orderDetailRepository.UpdateAsync(orderDetail);
                             if (product == null) throw new ApiException("Product not found");
-                            product.Quantity = product.Quantity + oldQuantity - item.Quantity;
                             _mapper.Map(product, product);
                             await _productRepsitory.UpdateAsync(product);
                             await _unitOfWork.Commit(cancellationToken);

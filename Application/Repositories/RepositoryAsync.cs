@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Application.Repositories
 {
-    public class RepositoryAsync<T, TId> : IRepositoryAsync<T, TId> where T : AuditableBaseEntity<TId>
+    public class RepositoryAsync<T, TId> : Interfaces.Repositories.RepositoryAsync<T, TId> where T : AuditableBaseEntity<TId>
     {
         private readonly ApplicationDbContext _context;
 

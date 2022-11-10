@@ -16,9 +16,9 @@ namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQ
         internal class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>>
         {
             private readonly ICategoryRepository _categoryRepository;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
 
-            public GetProductsByCategoryIdQueryHandler(ICategoryRepository categoryRepository, IProductRepsitory productRepsitory)
+            public GetProductsByCategoryIdQueryHandler(ICategoryRepository categoryRepository, IProductRepository productRepsitory)
             {
                 _categoryRepository = categoryRepository;
                 _productRepsitory = productRepsitory;
@@ -34,9 +34,7 @@ namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQ
                             {
                                 ProductName = p.Name,
                                 Description = p.Description,
-                                Rate = p.Rate,
-                                Price = p.Price,
-                                Quantity = p.Quantity
+                                Rate = p.Rate
                             });
 
                 list = request.Order switch

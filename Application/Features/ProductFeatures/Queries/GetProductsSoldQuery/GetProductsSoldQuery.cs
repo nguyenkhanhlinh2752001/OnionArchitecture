@@ -10,10 +10,10 @@ namespace Application.Features.ProductFeatures.Queries.GetProductsSoldQuery
         internal class GetProductsSoldQueryHandler : IRequestHandler<GetProductsSoldQuery, IEnumerable<GetProductsSoldViewModel>>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly ICategoryRepository _categoryRepository;
 
-            public GetProductsSoldQueryHandler(ApplicationDbContext context, IProductRepsitory productRepsitory, ICategoryRepository categoryRepository)
+            public GetProductsSoldQueryHandler(ApplicationDbContext context, IProductRepository productRepsitory, ICategoryRepository categoryRepository)
             {
                 _context = context;
                 _productRepsitory = productRepsitory;
@@ -29,7 +29,7 @@ namespace Application.Features.ProductFeatures.Queries.GetProductsSoldQuery
                                   {
                                       Id = p1.Id,
                                       Name = p1.Name,
-                                      Price = p1.Price,
+                                      //Price = p1.Price,
                                       Category = c.Name,
                                       TotalQuantity = (from p2 in _context.Products
                                                        join od in _context.OrderDetails

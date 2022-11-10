@@ -20,10 +20,10 @@ namespace Application.Features.ProductFeatures.Queries.GetAllProducts
 
         internal class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<IEnumerable<GetAllProductsViewModel>>>
         {
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly ICategoryRepository _categoryRepository;
 
-            public GetAllProductsQueryHandler(IProductRepsitory productRepsitory, ICategoryRepository categoryRepository)
+            public GetAllProductsQueryHandler(IProductRepository productRepsitory, ICategoryRepository categoryRepository)
             {
                 _productRepsitory = productRepsitory;
                 _categoryRepository = categoryRepository;
@@ -34,8 +34,8 @@ namespace Application.Features.ProductFeatures.Queries.GetAllProducts
                 var list = (from p in _productRepsitory.Entities
                             join c in _categoryRepository.Entities on p.CategoryId equals c.Id
                             where (string.IsNullOrEmpty(query.ProductName) || p.Name.ToLower().Contains(query.ProductName.ToLower()))
-                            && (!query.FromPrice.HasValue || p.Price >= query.FromPrice.Value)
-                            && (!query.ToPrice.HasValue || p.Price <= query.ToPrice.Value)
+                            //&& (!query.FromPrice.HasValue || p.Price >= query.FromPrice.Value)
+                            //&& (!query.ToPrice.HasValue || p.Price <= query.ToPrice.Value)
                             && (!query.FromRate.HasValue || p.Rate >= query.FromRate.Value)
                             && (!query.ToRate.HasValue || p.Rate <= query.ToRate.Value)
                             && (string.IsNullOrEmpty(query.CategoryName) || c.Name.ToLower().Contains(query.CategoryName.ToLower()))
@@ -46,8 +46,8 @@ namespace Application.Features.ProductFeatures.Queries.GetAllProducts
                                 CategoryName = c.Name,
                                 Barcode = p.Barcode,
                                 Description = p.Description,
-                                Price = p.Price,
-                                Quantity = p.Quantity,
+                                //Price = p.Price,
+                                //Quantity = p.Quantity,
                                 Rate = p.Rate
                             });
                 list = query.Order switch

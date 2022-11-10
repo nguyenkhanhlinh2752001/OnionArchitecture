@@ -11,10 +11,10 @@ namespace Application.Features.ProductFeatures.Commands.DeleteProductById
 
         internal class DeleteProductByIdCommandHandler : IRequestHandler<DeleteProductByIdCommand, Response<DeleteProductByIdCommand>>
         {
-            private readonly IProductRepsitory _productRepsitory;
+            private readonly IProductRepository _productRepsitory;
             private readonly IUnitOfWork<int> _unitOfWork;
 
-            public DeleteProductByIdCommandHandler(IProductRepsitory productRepsitory, IUnitOfWork<int> unitOfWork)
+            public DeleteProductByIdCommandHandler(IProductRepository productRepsitory, IUnitOfWork<int> unitOfWork)
             {
                 _productRepsitory = productRepsitory;
                 _unitOfWork = unitOfWork;

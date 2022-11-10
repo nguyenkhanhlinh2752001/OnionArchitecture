@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IRepositoryAsync<T, in TId> where T : class, IEntity<TId>
+    public interface RepositoryAsync<T, in TId> where T : class, IEntity<TId>
     {
         IQueryable<T> Entities { get; }
         Task<T?> GetByIdAsync(TId id);

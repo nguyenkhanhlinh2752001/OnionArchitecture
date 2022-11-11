@@ -33,6 +33,8 @@ namespace Persistence.DatabaseSeeder
             AddProductDetail();
             AddImageReview();
             AddImageProductDetail();
+            AddOrder();
+            AddOrderDetail();
 
             _context.SaveChanges();
         }
@@ -212,7 +214,7 @@ namespace Persistence.DatabaseSeeder
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 1, Url = "url2" });
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 1, Url = "url3" });
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 2, Url = "url4" });
-                _context.ImageReviews.Add(new ImageReview() { ReviewId = 2, Url = "url5"});
+                _context.ImageReviews.Add(new ImageReview() { ReviewId = 2, Url = "url5" });
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 2, Url = "url6" });
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 3, Url = "url7" });
                 _context.ImageReviews.Add(new ImageReview() { ReviewId = 3, Url = "url8" });
@@ -234,6 +236,48 @@ namespace Persistence.DatabaseSeeder
                 _context.ImageProducts.Add(new ImageProduct() { ProductId = 3, Url = "url311" });
                 _context.ImageProducts.Add(new ImageProduct() { ProductId = 3, Url = "url211" });
                 _context.ImageProducts.Add(new ImageProduct() { ProductId = 3, Url = "url011" });
+            }
+        }
+
+        private void AddOrder()
+        {
+            if (!_context.Orders.Any())
+            {
+                _context.Orders.Add(new Order() { UserId = "14c249be-2fca-4887-b074-cdd317eba851", TotalPrice = 540, CreatedOn = DateTime.Now });
+                _context.Orders.Add(new Order() { UserId = "14c249be-2fca-4887-b074-cdd317eba851", TotalPrice = 120, CreatedOn = DateTime.Now });
+                _context.Orders.Add(new Order() { UserId = "4f5b5a8a-b552-41df-9904-a723ee1b2068", TotalPrice = 100, CreatedOn = DateTime.Now });
+                _context.Orders.Add(new Order() { UserId = "4f5b5a8a-b552-41df-9904-a723ee1b2068", TotalPrice = 140, CreatedOn = DateTime.Now });
+                _context.Orders.Add(new Order() { UserId = "d104f511-9ad9-4b1b-9a80-0c329b50b6b2", TotalPrice = 320, CreatedOn = DateTime.Now });
+                _context.Orders.Add(new Order() { UserId = "d104f511-9ad9-4b1b-9a80-0c329b50b6b2", TotalPrice = 330, CreatedOn = DateTime.Now });
+            }
+        }
+
+        private void AddOrderDetail()
+        {
+            if (!_context.OrderDetails.Any())
+            {
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 1, ProductDetailId = 1, CreatedOn = DateTime.Now, Quantity = 4 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 1, ProductDetailId = 2, CreatedOn = DateTime.Now, Quantity = 5 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 1, ProductDetailId = 3, CreatedOn = DateTime.Now, Quantity = 3 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 2, ProductDetailId = 4, CreatedOn = DateTime.Now, Quantity = 2 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 2, ProductDetailId = 5, CreatedOn = DateTime.Now, Quantity = 1 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 3, ProductDetailId = 6, CreatedOn = DateTime.Now, Quantity = 2 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 3, ProductDetailId = 7, CreatedOn = DateTime.Now, Quantity = 3 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 3, ProductDetailId = 8, CreatedOn = DateTime.Now, Quantity = 6 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 4, ProductDetailId = 9, CreatedOn = DateTime.Now, Quantity = 7 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 4, ProductDetailId = 10, CreatedOn = DateTime.Now, Quantity = 4 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 4, ProductDetailId = 11, CreatedOn = DateTime.Now, Quantity = 5 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 5, ProductDetailId = 12, CreatedOn = DateTime.Now, Quantity = 2 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 5, ProductDetailId = 13, CreatedOn = DateTime.Now, Quantity = 8 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 5, ProductDetailId = 14, CreatedOn = DateTime.Now, Quantity = 4 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 5, ProductDetailId = 15, CreatedOn = DateTime.Now, Quantity = 2 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 6, ProductDetailId = 16, CreatedOn = DateTime.Now, Quantity = 5 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 6, ProductDetailId = 17, CreatedOn = DateTime.Now, Quantity = 2 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 6, ProductDetailId = 18, CreatedOn = DateTime.Now, Quantity = 6 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 2, ProductDetailId = 19, CreatedOn = DateTime.Now, Quantity = 9 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 3, ProductDetailId = 20, CreatedOn = DateTime.Now, Quantity = 7 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 4, ProductDetailId = 21, CreatedOn = DateTime.Now, Quantity = 3 });
+                _context.OrderDetails.Add(new OrderDetail { OrderId = 1, ProductDetailId = 22, CreatedOn = DateTime.Now, Quantity = 2 });
             }
         }
     }

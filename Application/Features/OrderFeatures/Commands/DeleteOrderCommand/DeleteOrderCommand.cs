@@ -45,7 +45,7 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
                     await _orderDetailRepository.UpdateAsync(item);
                     await _unitOfWork.Commit(cancellationToken);
 
-                    var product = await _productRepsitory.FindAsync(x => x.Id == item.ProductId);
+                    var product = await _productRepsitory.FindAsync(x => x.Id == item.ProductDetailId);
                     if (product == null) throw new ApiException("Product not found");
                     await _productRepsitory.UpdateAsync(product);
                     await _unitOfWork.Commit(cancellationToken);

@@ -33,7 +33,7 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderDetailCommand
                 await _orderDetailRepository.UpdateAsync(orderdetail);
                 await _unitOfWork.Commit(cancellationToken);
 
-                var product = await _productRepsitory.FindAsync(x => x.Id == orderdetail.ProductId && !x.IsDeleted);
+                var product = await _productRepsitory.FindAsync(x => x.Id == orderdetail.ProductDetailId && !x.IsDeleted);
                 if (product == null) throw new ApiException("Product not found");
                 //product.Quantity = product.Quantity + orderdetail.Quantity;
                 await _productRepsitory.UpdateAsync(product);

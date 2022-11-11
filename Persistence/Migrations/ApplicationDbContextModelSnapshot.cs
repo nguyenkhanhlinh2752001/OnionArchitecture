@@ -281,7 +281,7 @@ namespace Persistence.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductDetailId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")

@@ -10,6 +10,7 @@ namespace Application.Features.ProductFeatures.Queries.GetReviewsByProductId
         public string Title { get; set; }
         public string Content { get; set; }
         public int Rate { get; set; }
+        public int Total { get; set; }
         public IEnumerable<ImageReviewDto> Images { get; set; }
         public DateTime? CreatedOn { get; set; }
     }

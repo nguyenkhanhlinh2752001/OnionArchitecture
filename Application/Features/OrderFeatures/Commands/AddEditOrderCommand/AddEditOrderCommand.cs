@@ -57,13 +57,13 @@ namespace Application.Features.OrderFeatures.Commands.AddEditOrderCommand
                 {
                     foreach (var item in request.OrderDetails)
                     {
-                        var orderDetail = await _orderDetailRepository.FindAsync(x => x.ProductId == item.ProductId && x.OrderId == request.Id && !x.IsDeleted);
+                        var orderDetail = await _orderDetailRepository.FindAsync(x => x.ProductDetailId == item.ProductDetailId && x.OrderId == request.Id && !x.IsDeleted);
                         if (orderDetail == null)
                         {
                             var addOrderdetail = _mapper.Map<OrderDetail>(item);
                             addOrderdetail.OrderId = orderId;
                             await _orderDetailRepository.AddAsync(addOrderdetail);
-                            var product = await _productRepsitory.FindAsync(x => x.Id == addOrderdetail.ProductId);
+                            var product = await _productRepsitory.FindAsync(x => x.Id == addOrderdetail.ProductDetailId);
                             if (product == null) throw new ApiException("Product not found");
                             _mapper.Map(product, product);
                             await _productRepsitory.UpdateAsync(product);
@@ -73,7 +73,7 @@ namespace Application.Features.OrderFeatures.Commands.AddEditOrderCommand
                         {
                             var oldQuantity = orderDetail.Quantity;
                             _mapper.Map(item, orderDetail);
-                            var product = await _productRepsitory.FindAsync(x => x.Id == orderDetail.ProductId);
+                            var product = await _productRepsitory.FindAsync(x => x.Id == orderDetail.ProductDetailId);
                             await _orderDetailRepository.UpdateAsync(orderDetail);
                             if (product == null) throw new ApiException("Product not found");
                             _mapper.Map(product, product);

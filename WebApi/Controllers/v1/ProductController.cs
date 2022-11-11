@@ -24,7 +24,7 @@ namespace WebApi.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await Mediator.Send(new GetProductByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetProductByIdQuery { ProductId = id }));
         }
 
         [HttpDelete("{id}")]

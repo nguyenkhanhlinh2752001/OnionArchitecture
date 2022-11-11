@@ -33,8 +33,8 @@ namespace Application.Features.ProductFeatures.Queries.GetProductsSoldQuery
                                       Category = c.Name,
                                       TotalQuantity = (from p2 in _context.Products
                                                        join od in _context.OrderDetails
-                                                       on p2.Id equals od.ProductId
-                                                       where p2.Id == od.ProductId && p2.Id == p1.Id
+                                                       on p2.Id equals od.ProductDetailId
+                                                       where p2.Id == od.ProductDetailId && p2.Id == p1.Id
                                                        select od.Quantity).Sum()
                                   }).ToListAsync();
                 return list.AsReadOnly();

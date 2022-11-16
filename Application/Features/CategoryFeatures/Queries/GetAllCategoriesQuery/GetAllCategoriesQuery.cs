@@ -1,82 +1,48 @@
-﻿using Application.ViewModels;
-using Application.Filter;
+﻿using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
-using Application.Interfaces.Repositories;
+using System.Linq.Dynamic.Core;
 
 namespace Application.Features.CategoryFeatures.Queries.GetAllCategoriesQuery
 {
-    public class GetAllCategoriesQuery : IRequest<PagedResponse<IEnumerable<GetAllCategoriesVM>>>
+    public class GetAllCategoriesQuery : IRequest<PagedResponse<IEnumerable<GetAllCategoriesViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public string? Order { get; set; }
-        public string? SortBy { get; set; }
+        public string? OrderBy { get; set; }
         public string? Name { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public string? CreatedBy { get; set; }
 
-        internal class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<IEnumerable<GetAllCategoriesVM>>>
+        internal class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, PagedResponse<IEnumerable<GetAllCategoriesViewModel>>>
         {
             private readonly ICategoryRepository _categoryRepository;
             private readonly IProductRepository _productRepsitory;
+            private readonly IProductDetailRepository _productDetailRepository;
 
-            public GetAllCategoriesQueryHandler( ICategoryRepository categoryRepository, IProductRepository productRepsitory)
+            public GetAllCategoriesQueryHandler(ICategoryRepository categoryRepository, IProductRepository productRepsitory, IProductDetailRepository productDetailRepository)
             {
                 _categoryRepository = categoryRepository;
                 _productRepsitory = productRepsitory;
+                _productDetailRepository = productDetailRepository;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetAllCategoriesVM>>> Handle(GetAllCategoriesQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetAllCategoriesViewModel>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
             {
                 var list = (from c in _categoryRepository.Entities
-                            where (string.IsNullOrEmpty(query.Name) || c.Name.ToLower().Contains(query.Name.ToLower()))
-                            && (string.IsNullOrEmpty(query.CreatedBy) || c.CreatedBy.Contains(query.CreatedBy))
-                            && (!query.FromDate.HasValue || c.CreatedOn <= query.FromDate.Value)
-                            && (!query.ToDate.HasValue || c.CreatedOn >= query.ToDate.Value)
-                            select new GetAllCategoriesVM()
+                            where (string.IsNullOrEmpty(request.Name) || c.Name.ToLower().Contains(request.Name.ToLower()))
+                            select new GetAllCategoriesViewModel()
                             {
                                 Id = c.Id,
                                 Name = c.Name,
-                                CreatedBy = c.CreatedBy,
                                 CreatedOn = c.CreatedOn,
-                                Products = (from p in _productRepsitory.Entities
-                                            join v in _categoryRepository.Entities
-                                            on p.CategoryId equals c.Id
-                                            select new ProductVM
-                                            {
-                                                Id = p.Id,
-                                                ProductName = p.Name,
-                                                Barcode = p.Barcode,
-                                                CategoryName = c.Name,
-                                                CreatedDate = p.CreatedOn,
-                                                Description = p.Description,
-                                                Rate = p.Rate
-                                            }).ToList()
+                                ProductAmount = (from p in _productRepsitory.Entities
+                                                 where p.CategoryId == c.Id
+                                                 select p).Count()
                             });
-                list = query.Order switch
-                {
-                    "asc" => query.SortBy switch
-                    {
-                        "Name" => list.OrderBy(x => x.Name),
-                        "CreatedBy" => list.OrderBy(x => x.CreatedBy),
-                        "CreatedOn"=>list.OrderBy(x=>x.CreatedOn)
-                    },
-                    "desc" => query.SortBy switch
-                    {
-                        "Name" => list.OrderByDescending(x => x.Name),
-                        "CreatedBy" => list.OrderByDescending(x => x.CreatedBy),
-                        "CreatedOn" => list.OrderByDescending(x => x.CreatedOn)
-                    },
-                    _ => list
-                };
-                var total = list.Count();
-                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
-
-                return (new PagedResponse<IEnumerable<GetAllCategoriesVM>>(list, query.PageNumber, query.PageSize, total));
+                var data = list.OrderBy(request.OrderBy!);
+                var total = data.Count();
+                var rs = await data.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetAllCategoriesViewModel>>(rs, request.PageNumber, request.PageSize, total));
             }
         }
     }

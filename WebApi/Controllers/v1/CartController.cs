@@ -24,7 +24,7 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(new DeleteCartCommand { Id = id }));
         }
 
-        [HttpGet("user")]
+        [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> GetByUserId()
         {

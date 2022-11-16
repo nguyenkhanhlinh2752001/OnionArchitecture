@@ -3,6 +3,6 @@
     public class BaseVM
     {
         public int Id { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Application.Features.CartFeatures.Commands.AddEditCartCommand
                 if (cart == null) throw new ApiException("Cart not found");
                 var cartId = cart.Id;
 
-                var cartDetail = await _cartDetailRepository.FindAsync(x => x.CartId == cartId && x.ProductId == request.ProductId);
+                var cartDetail = await _cartDetailRepository.FindAsync(x => x.CartId == cartId && x.ProductDetailId == request.ProductId);
 
                 if (cartDetail == null)
                 {

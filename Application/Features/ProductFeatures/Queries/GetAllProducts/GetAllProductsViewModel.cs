@@ -2,13 +2,12 @@
 {
     public class GetAllProductsViewModel
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
-        public string CategoryName { get; set; }
-        public string Barcode { get; set; }
-        public string Description { get; set; }
-        public decimal? Rate { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public decimal? AvgRate { get; set; } = 0;
+        public decimal MinPrice { get; set; }
+        public decimal MaxPrice { get; set; }
+        public int SaleAmount { get; set; } = 0;
+        public DateTime? CreatedOn { get; set; }
     }
 }

@@ -3,21 +3,19 @@ using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using System.Linq.Dynamic.Core;
 
 namespace Application.Features.OrderFeatures.Queries.GetAllOrdersQuery
 {
     public class GetAllOrdersQuery : IRequest<PagedResponse<IEnumerable<GetAllOrdersVM>>>
     {
+        public string? OrderBy { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public string? Order { get; set; }
-        public string? SortBy { get; set; }
         public string? UserName { get; set; }
         public string? PhoneNumber { get; set; }
-        public decimal? TotalPriceFrom { get; set; }
-        public decimal? TotalPriceTo { get; set; }
-        public DateTime? CreatedFrom { get; set; }
-        public DateTime? CreatedTo { get; set; }
+        public decimal? TotalPrice { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         internal class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, PagedResponse<IEnumerable<GetAllOrdersVM>>>
         {
@@ -30,43 +28,26 @@ namespace Application.Features.OrderFeatures.Queries.GetAllOrdersQuery
                 _orderRespository = orderRespository;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetAllOrdersVM>>> Handle(GetAllOrdersQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetAllOrdersVM>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
             {
-                var list = (from o in _orderRespository.Entities
-                            join u in _context.Users on o.UserId equals u.Id
-                            where (string.IsNullOrEmpty(query.UserName) || u.UserName.ToLower().Contains(query.UserName.ToLower()))
-                            && (string.IsNullOrEmpty(query.PhoneNumber) || u.PhoneNumber.Contains(query.PhoneNumber))
-                            && (!query.TotalPriceFrom.HasValue || o.TotalPrice >= query.TotalPriceFrom.Value)
-                            && (!query.TotalPriceTo.HasValue || o.TotalPrice <= query.TotalPriceTo.Value)
-                            && (!query.CreatedFrom.HasValue || o.CreatedOn <= query.CreatedFrom.Value)
-                            && (!query.CreatedTo.HasValue || o.CreatedOn >= query.CreatedTo.Value)
-                            select new GetAllOrdersVM()
-                            {
-                                UserId = u.Id,
-                                UserName = u.UserName,
-                                PhoneNumber = u.PhoneNumber,
-                                TotalPrice = o.TotalPrice,
-                                CreatedDate = o.CreatedOn
-                            });
-                list = query.Order switch
-                {
-                    "asc" => query.SortBy switch
-                    {
-                        "Username" => list.OrderBy(x => x.UserName),
-                        "Price" => list.OrderBy(x => x.TotalPrice),
-                        "Date" => list.OrderBy(x => x.CreatedDate)
-                    },
-                    "desc" => query.SortBy switch
-                    {
-                        "Username" => list.OrderByDescending(x => x.UserName),
-                        "Price" => list.OrderByDescending(x => x.TotalPrice),
-                        "Date" => list.OrderByDescending(x => x.CreatedDate)
-                    },
-                    _ => list
-                };
-                var total = list.Count();
-                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetAllOrdersVM>>(list, query.PageNumber, query.PageSize, total));
+                var query = (from o in _orderRespository.Entities
+                             join u in _context.Users on o.UserId equals u.Id
+                             where (string.IsNullOrEmpty(request.UserName) || u.UserName.ToLower().Contains(request.UserName.ToLower()))
+                             && (string.IsNullOrEmpty(request.PhoneNumber) || u.PhoneNumber.Contains(request.PhoneNumber))
+                             && (!request.TotalPrice.HasValue || o.TotalPrice == request.TotalPrice.Value)
+                             && (!request.CreatedOn.HasValue || o.CreatedOn == request.CreatedOn.Value)
+                             select new GetAllOrdersVM()
+                             {
+                                 UserId = u.Id,
+                                 UserName = u.UserName,
+                                 PhoneNumber = u.PhoneNumber,
+                                 TotalPrice = o.TotalPrice,
+                                 CreatedOn = o.CreatedOn
+                             });
+                var data = query.OrderBy(request.OrderBy!);
+                var total = data.Count();
+                var rs = await data.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetAllOrdersVM>>(rs, request.PageNumber, request.PageSize, total));
             }
         }
     }

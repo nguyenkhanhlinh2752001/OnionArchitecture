@@ -47,10 +47,10 @@ namespace Application.Features.ReviewFeatures.Queries.GetReviewByUserId
                                 Title = r.Title,
                                 CreatedOn = r.CreatedOn
                             });
-                var data = list.OrderBy(request.OrderBy);
+                var data = list.OrderBy(request.OrderBy!);
                 var total = data.Count();
                 var rs = await data.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetReviewByUserIdViewModel>>(data, request.PageNumber, request.PageSize, total));
+                return (new PagedResponse<IEnumerable<GetReviewByUserIdViewModel>>(rs, request.PageNumber, request.PageSize, total));
             }
         }
     }

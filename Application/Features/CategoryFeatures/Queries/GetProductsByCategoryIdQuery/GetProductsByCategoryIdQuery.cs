@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQuery
 {
-    public class GetProductsByCategoryIdQuery : IRequest<PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>>
+    public class GetProductsByCategoryIdQuery : IRequest<PagedResponse<IEnumerable<GetProductsByCategoryIdViewModel>>>
     {
         public int CategoryId { get; set; }
         public int PageNumber { get; set; }
@@ -13,27 +13,32 @@ namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQ
         public string? Order { get; set; }
         public string? SortBy { get; set; }
 
-        internal class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>>
+        internal class GetProductsByCategoryIdQueryHandler : IRequestHandler<GetProductsByCategoryIdQuery, PagedResponse<IEnumerable<GetProductsByCategoryIdViewModel>>>
         {
             private readonly ICategoryRepository _categoryRepository;
             private readonly IProductRepository _productRepsitory;
+            private readonly IProductDetailRepository _productDetailRepository;
+            private readonly IOrderRespository _orderRespository;
+            private readonly IOrderDetailRepository _orderDetailRepository;
 
-            public GetProductsByCategoryIdQueryHandler(ICategoryRepository categoryRepository, IProductRepository productRepsitory)
+            public GetProductsByCategoryIdQueryHandler(ICategoryRepository categoryRepository, IProductRepository productRepsitory, IProductDetailRepository productDetailRepository, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository)
             {
                 _categoryRepository = categoryRepository;
                 _productRepsitory = productRepsitory;
+                _productDetailRepository = productDetailRepository;
+                _orderRespository = orderRespository;
+                _orderDetailRepository = orderDetailRepository;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetProductsByCategoryIdViewModel>>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
             {
                 var list = (from p in _productRepsitory.Entities
                             join ct in _categoryRepository.Entities
                             on p.CategoryId equals ct.Id
                             where p.CategoryId == request.CategoryId
-                            select new GetProductsByCategoryIdVM
+                            select new GetProductsByCategoryIdViewModel
                             {
                                 ProductName = p.Name,
-                                Description = p.Description,
                                 Rate = p.Rate
                             });
 
@@ -42,24 +47,16 @@ namespace Application.Features.CategoryFeatures.Queries.GetProductsByCategoryIdQ
                     "asc" => request.SortBy switch
                     {
                         "ProductName" => list.OrderBy(x => x.ProductName),
-                        "Description" => list.OrderBy(x => x.Description),
-                        "Rate" => list.OrderBy(x => x.Rate),
-                        "Price" => list.OrderBy(x => x.Price),
-                        "Quantity" => list.OrderBy(x => x.Quantity),
                     },
                     "desc" => request.SortBy switch
                     {
                         "ProductName" => list.OrderByDescending(x => x.ProductName),
-                        "Description" => list.OrderByDescending(x => x.Description),
-                        "Rate" => list.OrderByDescending(x => x.Rate),
-                        "Price" => list.OrderByDescending(x => x.Price),
-                        "Quantity" => list.OrderByDescending(x => x.Quantity),
                     },
                     _ => list
                 };
                 var total = list.Count();
                 var rs = await list.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
-                return new PagedResponse<IEnumerable<GetProductsByCategoryIdVM>>(list, request.PageNumber, request.PageSize, total);
+                return new PagedResponse<IEnumerable<GetProductsByCategoryIdViewModel>>(list, request.PageNumber, request.PageSize, total);
             }
         }
     }

@@ -2,6 +2,7 @@
 using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Application.Features.ProductFeatures.Queries.GetAllProducts
 {
@@ -9,66 +10,54 @@ namespace Application.Features.ProductFeatures.Queries.GetAllProducts
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public string? OrderBy { get; set; }
         public string? ProductName { get; set; }
-        public decimal? FromPrice { get; set; }
-        public decimal? ToPrice { get; set; }
-        public decimal? FromRate { get; set; }
-        public decimal? ToRate { get; set; }
-        public string? CategoryName { get; set; }
-        public string? Order { get; set; }
-        public string? SortBy { get; set; }
 
         internal class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<IEnumerable<GetAllProductsViewModel>>>
         {
             private readonly IProductRepository _productRepsitory;
-            private readonly ICategoryRepository _categoryRepository;
+            private readonly IProductDetailRepository _productDetailRepository;
+            private readonly IOrderDetailRepository _orderDetailRepository;
+            private readonly IReviewRepository _reviewRepository;
 
-            public GetAllProductsQueryHandler(IProductRepository productRepsitory, ICategoryRepository categoryRepository)
+            public GetAllProductsQueryHandler(IProductRepository productRepsitory, IProductDetailRepository productDetailRepository, IOrderDetailRepository orderDetailRepository, IReviewRepository reviewRepository)
             {
                 _productRepsitory = productRepsitory;
-                _categoryRepository = categoryRepository;
+                _productDetailRepository = productDetailRepository;
+                _orderDetailRepository = orderDetailRepository;
+                _reviewRepository = reviewRepository;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetAllProductsViewModel>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
             {
-                var list = (from p in _productRepsitory.Entities
-                            join c in _categoryRepository.Entities on p.CategoryId equals c.Id
-                            where (string.IsNullOrEmpty(query.ProductName) || p.Name.ToLower().Contains(query.ProductName.ToLower()))
-                            //&& (!query.FromPrice.HasValue || p.Price >= query.FromPrice.Value)
-                            //&& (!query.ToPrice.HasValue || p.Price <= query.ToPrice.Value)
-                            && (!query.FromRate.HasValue || p.Rate >= query.FromRate.Value)
-                            && (!query.ToRate.HasValue || p.Rate <= query.ToRate.Value)
-                            && (string.IsNullOrEmpty(query.CategoryName) || c.Name.ToLower().Contains(query.CategoryName.ToLower()))
-                            select new GetAllProductsViewModel()
-                            {
-                                Id = p.Id,
-                                ProductName = p.Name,
-                                CategoryName = c.Name,
-                                Barcode = p.Barcode,
-                                Description = p.Description,
-                                //Price = p.Price,
-                                //Quantity = p.Quantity,
-                                Rate = p.Rate
-                            });
-                list = query.Order switch
-                {
-                    "asc" => query.SortBy switch
-                    {
-                        "Name" => list.OrderBy(x => x.ProductName),
-                        "Price" => list.OrderBy(x => x.Price),
-                        "Rate" => list.OrderBy(x => x.Rate)
-                    },
-                    "desc" => query.SortBy switch
-                    {
-                        "Name" => list.OrderByDescending(x => x.ProductName),
-                        "Price" => list.OrderByDescending(x => x.Price),
-                        "Rate" => list.OrderByDescending(x => x.Rate)
-                    },
-                    _ => list
-                };
-                var total = list.Count();
-                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetAllProductsViewModel>>(list, query.PageNumber, query.PageSize, total));
+                var query = (from p in _productRepsitory.Entities
+                             where (string.IsNullOrEmpty(request.ProductName) || p.Name.ToLower().Contains(request.ProductName.ToLower()))
+                             select new GetAllProductsViewModel()
+                             {
+                                 ProductId = p.Id,
+                                 ProductName = p.Name,
+                                 MinPrice = (from pd in _productDetailRepository.Entities
+                                             where pd.ProductId == p.Id
+                                             select pd).Min(e => e.Price),
+                                 MaxPrice = (from pd in _productDetailRepository.Entities
+                                             where pd.ProductId == p.Id
+                                             select pd).Max(e => e.Price),
+                                 AvgRate = (decimal)(from r in _reviewRepository.Entities
+                                                     join pd in _productDetailRepository.Entities
+                                                     on r.ProductDetailId equals pd.Id
+                                                     where pd.ProductId == p.Id
+                                                     select r).Average(e => e.Rate),
+                                 SaleAmount = (from od in _orderDetailRepository.Entities
+                                               join pd in _productDetailRepository.Entities
+                                               on od.ProductDetailId equals pd.Id
+                                               where pd.ProductId == p.Id
+                                               select od).Sum(e => e.Quantity),
+                                 CreatedOn = p.CreatedOn,
+                             });
+                var data = query.OrderBy(request.OrderBy!);
+                var total = query.Count();
+                var rs = await query.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetAllProductsViewModel>>(rs, request.PageNumber, request.PageSize, total));
             }
         }
     }

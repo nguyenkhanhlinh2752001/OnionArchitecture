@@ -54,24 +54,20 @@ namespace WebApi.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
-            return Ok(await Mediator.Send(new GetOrdersByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetOrdersByIdQuery { OrderId = id }));
         }
 
         [HttpGet]
         [CustomAuthorizeAtrtibute(ConstantsAtr.OrderPermission, ConstantsAtr.Access)]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllOrdersQuery query)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllOrdersParameter query)
         {
             return Ok(await Mediator.Send(new GetAllOrdersQuery
             {
                 UserName = query.UserName,
                 PhoneNumber = query.PhoneNumber,
-                TotalPriceFrom = query.TotalPriceFrom,
-                TotalPriceTo = query.TotalPriceTo,
-                CreatedFrom = query.CreatedFrom,
-                CreatedTo = query.CreatedTo,
-                Order = query.Order,
-                SortBy = query.SortBy,
+                TotalPrice = query.TotalPrice,
+                OrderBy = query.OrderBy,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }));

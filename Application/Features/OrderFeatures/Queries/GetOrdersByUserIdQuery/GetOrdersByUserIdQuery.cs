@@ -1,8 +1,10 @@
-﻿using Application.Wrappers;
+﻿using Application.Interfaces.Repositories;
+using Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
 using Persistence.Services;
+using System.Linq.Dynamic.Core;
 
 namespace Application.Features.OrderFeatures.Queries.GetOrdersByUserIdQuery
 {
@@ -10,57 +12,42 @@ namespace Application.Features.OrderFeatures.Queries.GetOrdersByUserIdQuery
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public decimal? FromPrice { get; set; }
-        public decimal? ToPrice { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public string? Order { get; set; }
-        public string? SortBy { get; set; }
+        public string? OrderBy { get; set; }
+        public decimal? TotalPrice { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         internal class GetOrdersByUserIdQueryHandler : IRequestHandler<GetOrdersByUserIdQuery, PagedResponse<IEnumerable<GetOrdersByUserIdVM>>>
         {
             private readonly ApplicationDbContext _context;
+            private readonly IOrderRespository _orderRespository;
             private readonly ICurrentUserService _currentUserService;
 
-            public GetOrdersByUserIdQueryHandler(ApplicationDbContext context, ICurrentUserService currentUserService)
+            public GetOrdersByUserIdQueryHandler(ApplicationDbContext context, ICurrentUserService currentUserService, IOrderRespository orderRespository)
             {
                 _context = context;
                 _currentUserService = currentUserService;
+                _orderRespository = orderRespository;
             }
 
-            public async Task<PagedResponse<IEnumerable<GetOrdersByUserIdVM>>> Handle(GetOrdersByUserIdQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<GetOrdersByUserIdVM>>> Handle(GetOrdersByUserIdQuery request, CancellationToken cancellationToken)
             {
                 var userId = _currentUserService.Id;
-                var list = (from o in _context.Orders
-                            join u in _context.Users on o.UserId equals u.Id
-                            where u.Id == userId
-                            && (!query.FromPrice.HasValue || o.TotalPrice >= query.FromPrice.Value)
-                            && (!query.ToPrice.HasValue || o.TotalPrice <= query.ToPrice.Value)
-                            && (!query.FromDate.HasValue || o.CreatedOn <= query.FromDate.Value)
-                            && (!query.ToDate.HasValue || o.CreatedOn >= query.ToDate.Value)
-                            select new GetOrdersByUserIdVM()
-                            {
-                                OrderId = o.Id,
-                                TotalPrice = o.TotalPrice,
-                                CreatedOn = o.CreatedOn
-                            });
-                list = query.Order switch
-                {
-                    "asc" => query.SortBy switch
-                    {
-                        "Price" => list.OrderBy(x => x.TotalPrice),
-                        "Date" => list.OrderBy(x => x.CreatedOn)
-                    },
-                    "desc" => query.SortBy switch
-                    {
-                        "Price" => list.OrderByDescending(x => x.TotalPrice),
-                        "Date" => list.OrderByDescending(x => x.CreatedOn)
-                    },
-                    _ => list
-                };
-                var total = list.Count();
-                var rs = await list.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize).ToListAsync();
-                return (new PagedResponse<IEnumerable<GetOrdersByUserIdVM>>(list, query.PageNumber, query.PageSize, total));
+                var query = (from o in _orderRespository.Entities
+                             join u in _context.Users on o.UserId equals u.Id
+                             where u.Id == userId
+                             && (!request.TotalPrice.HasValue || o.TotalPrice == request.TotalPrice.Value)
+                             && (!request.CreatedOn.HasValue || o.CreatedOn == request.CreatedOn.Value)
+                             select new GetOrdersByUserIdVM()
+                             {
+                                 OrderId = o.Id,
+                                 TotalPrice = o.TotalPrice,
+                                 CreatedOn = o.CreatedOn
+                             });
+
+                var data = query.OrderBy(request.OrderBy!);
+                var total = data.Count();
+                var rs = await data.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                return (new PagedResponse<IEnumerable<GetOrdersByUserIdVM>>(rs, request.PageNumber, request.PageSize, total));
             }
         }
     }

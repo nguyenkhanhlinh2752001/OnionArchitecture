@@ -60,12 +60,9 @@ namespace WebApi.Controllers.v1
         {
             return Ok(await Mediator.Send(new GetOrdersByUserIdQuery
             {
-                FromPrice = query.FromPrice,
-                ToPrice = query.ToPrice,
-                FromDate = query.FromDate,
-                ToDate = query.ToDate,
-                Order = query.Order,
-                SortBy = query.SortBy,
+                TotalPrice = query.TotalPrice,
+                CreatedOn = query.CreatedOn,
+                OrderBy = query.OrderBy,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }));

@@ -48,11 +48,7 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetAllCategoriesQuery
             {
                 Name = query.Name,
-                CreatedBy = query.CreatedBy,
-                FromDate = query.FromDate,
-                ToDate = query.ToDate,
-                SortBy = query.SortBy,
-                Order = query.Order,
+                OrderBy = query.OrderBy,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }));
@@ -63,17 +59,16 @@ namespace WebApi.Controllers.v1
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        [HttpGet("category-detail")]
-        public async Task<IActionResult> GetProductsByCategoryId([FromQuery] GetProductsByCategoryIdParamter query)
-        {
-            return Ok(await Mediator.Send(new GetProductsByCategoryIdQuery
-            {
-                CategoryId = query.CategoryId,
-                Order = query.Order,
-                PageNumber = query.PageNumber,
-                PageSize = query.PageSize,
-                SortBy = query.SortBy
-            }));
-        }
+        //[HttpGet("category-detail")]
+        //public async Task<IActionResult> GetProductsByCategoryId([FromQuery] GetProductsByCategoryIdParamter query)
+        //{
+        //    return Ok(await Mediator.Send(new GetProductsByCategoryIdQuery
+        //    {
+        //        CategoryId = query.CategoryId,
+        //        OrderBy = query.Order,
+        //        PageNumber = query.PageNumber,
+        //        PageSize = query.PageSize
+        //    }));
+        //}
     }
 }

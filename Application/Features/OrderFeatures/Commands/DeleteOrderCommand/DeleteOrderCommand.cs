@@ -16,18 +16,18 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
             private readonly ApplicationDbContext _context;
             private readonly IOrderRespository _orderRespository;
             private readonly IOrderDetailRepository _orderDetailRepository;
-            private readonly IProductRepository _productRepsitory;
+            private readonly IProductDetailRepository _productDetailRepository;
             private readonly IMapper _mapper;
             private readonly IUnitOfWork<int> _unitOfWork;
 
-            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IUnitOfWork<int> unitOfWork, IProductRepository productRepsitory)
+            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IUnitOfWork<int> unitOfWork, IProductDetailRepository productDetailRepository)
             {
                 _context = context;
                 _orderRespository = orderRespository;
                 _orderDetailRepository = orderDetailRepository;
                 _mapper = mapper;
                 _unitOfWork = unitOfWork;
-                _productRepsitory = productRepsitory;
+                _productDetailRepository = productDetailRepository;
             }
 
             public async Task<Response<DeleteOrderCommand>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
@@ -45,9 +45,9 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
                     await _orderDetailRepository.UpdateAsync(item);
                     await _unitOfWork.Commit(cancellationToken);
 
-                    var product = await _productRepsitory.FindAsync(x => x.Id == item.ProductDetailId);
-                    if (product == null) throw new ApiException("Product not found");
-                    await _productRepsitory.UpdateAsync(product);
+                    var product = await _productDetailRepository.FindAsync(x => x.Id == item.ProductDetailId);
+                    if (product == null) throw new ApiException("Product detail not found");
+                    await _productDetailRepository.UpdateAsync(product);
                     await _unitOfWork.Commit(cancellationToken);
                 }
 

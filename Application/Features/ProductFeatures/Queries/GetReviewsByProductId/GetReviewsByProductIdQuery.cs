@@ -37,7 +37,7 @@ namespace Application.Features.ProductFeatures.Queries.GetReviewsByProductId
                 var listProductDetailid = await _productDetailRepository.Entities.Where(x => x.ProductId == request.ProductId).Select(x => x.Id).ToListAsync();
                 if (listProductDetailid == null) throw new ApiException("");
 
-                var query = _reviewRepository.Entities.Where(x => listProductDetailid.Contains(x.ProductDetailId))
+                var query1 = _reviewRepository.Entities.Where(x => listProductDetailid.Contains(x.ProductDetailId))
                     .Select(x => new GetReviewsByProductIdViewModel
                     {
                         Rate = x.Rate,
@@ -50,37 +50,36 @@ namespace Application.Features.ProductFeatures.Queries.GetReviewsByProductId
                         }).ToList()
                     });
 
-                var query2 = (from r in _reviewRepository.Entities
-                              join u in _context.Users
-                                on r.UserId equals u.Id into leftJoinUser
-                              from user in leftJoinUser.DefaultIfEmpty()
-                              join pd in _productDetailRepository.Entities
-                                on r.ProductDetailId equals pd.Id into leftJoinProductDetail
-                              from productDetail in leftJoinProductDetail.DefaultIfEmpty()
-                              where r.ProductDetailId == productDetail.Id
-                              && productDetail.ProductId == request.ProductId
-                              && (!request.Rate.HasValue || r.Rate == request.Rate.Value)
-                              select new GetReviewsByProductIdViewModel
-                              {
-                                  UserName = user.UserName,
-                                  ProductDetailId = productDetail.Id,
-                                  Color = productDetail.Color,
-                                  Content = r.Content,
-                                  Rate = r.Rate,
-                                  CreatedOn = r.CreatedOn,
-                                  Title = r.Title,
-                                  Images = (from ir in _imageReviewRepository.Entities
-                                            where r.Id == ir.ReviewId
-                                            select new ImageReviewDto
-                                            {
-                                                Url = ir.Url
-                                            }).ToList()
-                              });
+                var query = (from r in _reviewRepository.Entities
+                             join u in _context.Users
+                               on r.UserId equals u.Id into leftJoinUser
+                             from user in leftJoinUser.DefaultIfEmpty()
+                             join pd in _productDetailRepository.Entities
+                               on r.ProductDetailId equals pd.Id into leftJoinProductDetail
+                             from productDetail in leftJoinProductDetail.DefaultIfEmpty()
+                             where r.ProductDetailId == productDetail.Id
+                             && productDetail.ProductId == request.ProductId
+                             && (!request.Rate.HasValue || r.Rate == request.Rate.Value)
+                             select new GetReviewsByProductIdViewModel
+                             {
+                                 UserName = user.UserName,
+                                 ProductDetailId = productDetail.Id,
+                                 Color = productDetail.Color,
+                                 Content = r.Content,
+                                 Rate = r.Rate,
+                                 CreatedOn = r.CreatedOn,
+                                 Title = r.Title,
+                                 Images = (from ir in _imageReviewRepository.Entities
+                                           where r.Id == ir.ReviewId
+                                           select new ImageReviewDto
+                                           {
+                                               Url = ir.Url
+                                           }).ToList()
+                             });
 
-                var data = query2.OrderBy(request.OrderBy);
-
-                var total = query2.Count();
-                var rs = await query2.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
+                var data = query.OrderBy(request.OrderBy!);
+                var total = query.Count();
+                var rs = await query.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToListAsync();
                 return (new PagedResponse<IEnumerable<GetReviewsByProductIdViewModel>>(rs, request.PageNumber, request.PageSize, total));
             }
         }

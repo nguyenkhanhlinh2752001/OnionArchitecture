@@ -35,6 +35,7 @@ namespace Persistence.DatabaseSeeder
             AddImageProductDetail();
             AddOrder();
             AddOrderDetail();
+            AddCartDetail();
 
             _context.SaveChanges();
         }
@@ -137,17 +138,17 @@ namespace Persistence.DatabaseSeeder
         {
             if (!_context.Permissons.Any())
             {
-                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 1, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 2, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 3, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "9c5247a9-d894-4702-b4ff-a0452a44e75b", MenuId = 5, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "279cf3e7-bf86-4914-94ea-9211b1fbab19", MenuId = 1, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "279cf3e7-bf86-4914-94ea-9211b1fbab19", MenuId = 2, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "279cf3e7-bf86-4914-94ea-9211b1fbab19", MenuId = 3, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "279cf3e7-bf86-4914-94ea-9211b1fbab19", MenuId = 4, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "279cf3e7-bf86-4914-94ea-9211b1fbab19", MenuId = 5, CanAccess = true, CanAdd = true, CanDelete = true, CanUpdate = true });
 
-                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 1, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 2, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 3, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
-                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 4, CanAccess = false, CanAdd = true, CanDelete = true, CanUpdate = true });
-                _context.Permissons.Add(new Permission() { RoleId = "ab5f1e11-111d-4c06-bf0c-f45828430b34", MenuId = 5, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "b71e8e49-04b0-40fe-a8ef-37fd22ed2bd0", MenuId = 1, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "b71e8e49-04b0-40fe-a8ef-37fd22ed2bd0", MenuId = 2, CanAccess = true, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "b71e8e49-04b0-40fe-a8ef-37fd22ed2bd0", MenuId = 3, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
+                _context.Permissons.Add(new Permission() { RoleId = "b71e8e49-04b0-40fe-a8ef-37fd22ed2bd0", MenuId = 4, CanAccess = false, CanAdd = true, CanDelete = true, CanUpdate = true });
+                _context.Permissons.Add(new Permission() { RoleId = "b71e8e49-04b0-40fe-a8ef-37fd22ed2bd0", MenuId = 5, CanAccess = false, CanAdd = false, CanDelete = false, CanUpdate = false });
             }
         }
 
@@ -249,6 +250,30 @@ namespace Persistence.DatabaseSeeder
                 _context.Orders.Add(new Order() { UserId = "4f5b5a8a-b552-41df-9904-a723ee1b2068", TotalPrice = 140, CreatedOn = DateTime.Now });
                 _context.Orders.Add(new Order() { UserId = "d104f511-9ad9-4b1b-9a80-0c329b50b6b2", TotalPrice = 320, CreatedOn = DateTime.Now });
                 _context.Orders.Add(new Order() { UserId = "d104f511-9ad9-4b1b-9a80-0c329b50b6b2", TotalPrice = 330, CreatedOn = DateTime.Now });
+            }
+        }
+
+        private void AddCartDetail()
+        {
+            if (!_context.CartDetails.Any())
+            {
+                _context.CartDetails.Add(new CartDetail { CartId = 1, CreatedOn = DateTime.Now, ProductDetailId = 1, Quantity = 3, });
+                _context.CartDetails.Add(new CartDetail { CartId = 1, CreatedOn = DateTime.Now, ProductDetailId = 3, Quantity = 2 });
+                _context.CartDetails.Add(new CartDetail { CartId = 1, CreatedOn = DateTime.Now, ProductDetailId = 6, Quantity = 7 });
+                _context.CartDetails.Add(new CartDetail { CartId = 1, CreatedOn = DateTime.Now, ProductDetailId = 8, Quantity = 2 });
+                _context.CartDetails.Add(new CartDetail { CartId = 2, CreatedOn = DateTime.Now, ProductDetailId = 11, Quantity = 5 });
+                _context.CartDetails.Add(new CartDetail { CartId = 2, CreatedOn = DateTime.Now, ProductDetailId = 12, Quantity = 8 });
+                _context.CartDetails.Add(new CartDetail { CartId = 2, CreatedOn = DateTime.Now, ProductDetailId = 13, Quantity = 5 });
+                _context.CartDetails.Add(new CartDetail { CartId = 3, CreatedOn = DateTime.Now, ProductDetailId = 14, Quantity = 3 });
+                _context.CartDetails.Add(new CartDetail { CartId = 3, CreatedOn = DateTime.Now, ProductDetailId = 15, Quantity = 5 });
+                _context.CartDetails.Add(new CartDetail { CartId = 3, CreatedOn = DateTime.Now, ProductDetailId = 16, Quantity = 6 });
+                _context.CartDetails.Add(new CartDetail { CartId = 3, CreatedOn = DateTime.Now, ProductDetailId = 17, Quantity = 2 });
+                _context.CartDetails.Add(new CartDetail { CartId = 1, CreatedOn = DateTime.Now, ProductDetailId = 18, Quantity = 1 });
+                _context.CartDetails.Add(new CartDetail { CartId = 4, CreatedOn = DateTime.Now, ProductDetailId = 19, Quantity = 5 });
+                _context.CartDetails.Add(new CartDetail { CartId = 4, CreatedOn = DateTime.Now, ProductDetailId = 20, Quantity = 4 });
+                _context.CartDetails.Add(new CartDetail { CartId = 2, CreatedOn = DateTime.Now, ProductDetailId = 1, Quantity = 3 });
+                _context.CartDetails.Add(new CartDetail { CartId = 4, CreatedOn = DateTime.Now, ProductDetailId = 2, Quantity = 7 });
+                _context.CartDetails.Add(new CartDetail { CartId = 4, CreatedOn = DateTime.Now, ProductDetailId = 7, Quantity = 2 });
             }
         }
 

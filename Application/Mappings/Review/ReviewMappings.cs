@@ -1,4 +1,5 @@
-﻿using Application.Features.ReviewFeatures.Commands.AddEditReview;
+﻿using Application.Dtos.Reviews;
+using Application.Features.ReviewFeatures.Commands.AddEditReview;
 using AutoMapper;
 
 namespace Application.Mappings.Review
@@ -8,6 +9,7 @@ namespace Application.Mappings.Review
         public ReviewMappings()
         {
             CreateMap<AddEditReviewCommand, Domain.Entities.Review>();
+            CreateMap<ImageReviewDto, Domain.Entities.ImageReview>();
         }
     }
 }

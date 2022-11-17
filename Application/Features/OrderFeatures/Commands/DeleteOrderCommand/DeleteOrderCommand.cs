@@ -17,15 +17,13 @@ namespace Application.Features.OrderFeatures.Commands.DeleteOrderCommand
             private readonly IOrderRespository _orderRespository;
             private readonly IOrderDetailRepository _orderDetailRepository;
             private readonly IProductDetailRepository _productDetailRepository;
-            private readonly IMapper _mapper;
             private readonly IUnitOfWork<int> _unitOfWork;
 
-            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IUnitOfWork<int> unitOfWork, IProductDetailRepository productDetailRepository)
+            public DeleteOrderCommandHanlder(ApplicationDbContext context, IOrderRespository orderRespository, IOrderDetailRepository orderDetailRepository, IUnitOfWork<int> unitOfWork, IProductDetailRepository productDetailRepository)
             {
                 _context = context;
                 _orderRespository = orderRespository;
                 _orderDetailRepository = orderDetailRepository;
-                _mapper = mapper;
                 _unitOfWork = unitOfWork;
                 _productDetailRepository = productDetailRepository;
             }

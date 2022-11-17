@@ -1,4 +1,5 @@
-﻿using Application.Features.ProductFeatures.Commands.AddEditProduct;
+﻿using Application.Dtos.Products;
+using Application.Features.ProductFeatures.Commands.AddEditProduct;
 using AutoMapper;
 
 namespace Application.Mappings.Product
@@ -8,6 +9,7 @@ namespace Application.Mappings.Product
         public ProductMappings()
         {
             CreateMap<AddEditProductCommand, Domain.Entities.Product>();
+            CreateMap<ProductDetailDto, Domain.Entities.ProductDetail>();
         }
     }
 }

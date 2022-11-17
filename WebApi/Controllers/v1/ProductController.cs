@@ -1,5 +1,6 @@
 ﻿using Application.Features.ProductFeatures.Commands.AddEditProduct;
 using Application.Features.ProductFeatures.Commands.DeleteProductById;
+using Application.Features.ProductFeatures.Commands.DeleteProdutcDetailById;
 using Application.Features.ProductFeatures.Queries.GetAllProducts;
 using Application.Features.ProductFeatures.Queries.GetProductById;
 using Application.Features.ProductFeatures.Queries.GetReviewsByProductId;
@@ -32,6 +33,14 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
+        }
+
+        [HttpDelete("product-detail/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [CustomAuthorizeAtrtibute(ConstantsAtr.ProductPermission, ConstantsAtr.Delete)]
+        public async Task<IActionResult> DeleteProductDetail(int id)
+        {
+            return Ok(await Mediator.Send(new DeleteProductDetailByIdCommand { Id = id }));
         }
 
         [HttpGet]

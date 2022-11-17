@@ -83,7 +83,7 @@ namespace Application.Features.ProductFeatures.Queries.GetProductById
                                                   where pd.ProductId == p.Id
                                                   select new ProductDetailDto
                                                   {
-                                                      ColorName = pd.Color,
+                                                      Color = pd.Color,
                                                       Quantity = pd.Quantity,
                                                       ImageUrl = pd.ImageUrl,
                                                       Price = pd.Price

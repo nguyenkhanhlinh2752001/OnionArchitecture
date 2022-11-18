@@ -20,12 +20,14 @@ namespace Application.Features.ReviewFeatures.Queries.GetReviewByUserId
             private readonly IReviewRepository _reviewRepository;
             private readonly ICurrentUserService _currentUserService;
             private readonly IProductRepository _productRepsitory;
+            private readonly IProductDetailRepository _productDetailRepository;
 
-            public GetReviewByUserIdQueryHandler(IReviewRepository reviewRepository, ICurrentUserService currentUserService, IProductRepository productRepsitory)
+            public GetReviewByUserIdQueryHandler(IReviewRepository reviewRepository, ICurrentUserService currentUserService, IProductRepository productRepsitory, IProductDetailRepository productDetailRepository)
             {
                 _reviewRepository = reviewRepository;
                 _currentUserService = currentUserService;
                 _productRepsitory = productRepsitory;
+                _productDetailRepository = productDetailRepository;
             }
 
             public async Task<PagedResponse<IEnumerable<GetReviewByUserIdViewModel>>> Handle(GetReviewByUserIdQuery request, CancellationToken cancellationToken)

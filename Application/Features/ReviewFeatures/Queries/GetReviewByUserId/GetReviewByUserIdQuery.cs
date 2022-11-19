@@ -18,7 +18,6 @@ namespace Application.Features.ReviewFeatures.Queries.GetReviewByUserId
         internal class GetReviewByUserIdQueryHandler : IRequestHandler<GetReviewByUserIdQuery, PagedResponse<IEnumerable<GetReviewByUserIdViewModel>>>
         {
             private readonly IReviewRepository _reviewRepository;
-
             private readonly ICurrentUserService _currentUserService;
 
             private readonly IProductRepository _productRepsitory;

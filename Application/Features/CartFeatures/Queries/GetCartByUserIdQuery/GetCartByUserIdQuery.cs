@@ -22,6 +22,7 @@ namespace Application.Features.CartFeatures.Queries.GetCartByUserIdCommand
                 _currentUserService = currentUserService;
                 _cartDetailRepository = cartDetailRepository;
                 _cartRepository = cartRepository;
+
                 _productDetailRepository = productDetailRepository;
                 _productRepository = productRepository;
             }
